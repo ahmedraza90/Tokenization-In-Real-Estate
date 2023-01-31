@@ -41,9 +41,9 @@ export const addProperty = (formData,Pricepertoken,CloneOwner,numberOfSupplies,n
     }
     
    
-    const  {data}  = await axios.post('http://localhost:3001/api/property/check', formData ,
+    const  {data}  = await axios.post('http://localhost:8000/api/property/check', formData ,
     config)
-    console.log(data)
+    console.log("data",data)
     
     const propertyId = data.addProperty._id
 
@@ -59,7 +59,7 @@ export const addProperty = (formData,Pricepertoken,CloneOwner,numberOfSupplies,n
         "auth-token":token
       }
     }
-     const  data1  = await axios.post('http://localhost:3001/api/property/checkToken', testData,newconfig)
+     const  data1  = await axios.post('http://localhost:8000/api/property/checkToken', testData,newconfig)
 
       let listingData = data1.data.listing
     dispatch({
@@ -89,7 +89,7 @@ export const getAllProperties = () => async (dispatch) => {
         'Content-Type': 'application/json'
       }
     }
-    const {data} = await axios.get("http://localhost:3001/api/property/allproperties",config)
+    const {data} = await axios.get("http://localhost:8000/api/property/allproperties",config)
 
     dispatch({
       type: LIST_PROPERTY_SUCCESS,
@@ -110,7 +110,7 @@ export const listPropertyDetails = (id) => async (dispatch) => {
        type: PROPERTY_DETAILS_REQUEST 
       })
 
-    const { data } = await axios.get(`http://localhost:3001/api/property/${id}`)
+    const { data } = await axios.get(`http://localhost:8000/api/property/${id}`)
 
     dispatch({
       type: PROPERTY_DETAILS_SUCCESS,
@@ -128,7 +128,7 @@ export const SearchProperties = (key) => async (dispatch) => {
        type: SEARCH_PROPERTY_REQUEST 
       })
 
-    const { data } = await axios.get(`http://localhost:3001/search/${key}`)
+    const { data } = await axios.get(`http://localhost:8000/search/${key}`)
     console.log(data)
 
     dispatch({
