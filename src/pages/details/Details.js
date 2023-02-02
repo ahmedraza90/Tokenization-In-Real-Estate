@@ -8,6 +8,7 @@ function Details() {
 
   const propertyDetails = useSelector(state => state.propertyDetails)
   const { loading, error, property } = propertyDetails
+  console.log("***************",property)
 
   return (
     <>
@@ -19,55 +20,55 @@ function Details() {
         <div className="property-details">
           <h2>
             <h5> Owner name</h5>
-            <span className='gapleft'>{property[0].propertyId.ownerName}</span>
+            <span className='gapleft'>{property.ownerName}</span>
           </h2>
           <h2>
             <h5> Property Contract Address</h5>
-            <span className='gapleft'>{property[0].propertyId.PropertyContractAddress}</span>
+            <span className='gapleft'>{property.PropertyContractAddress}</span>
           </h2>
           <h2>
             <h5> Property Contract Owner </h5>
-            <span className='gapleft'>{property[0].propertyId.OwnerWalletAddress}</span>
+            <span className='gapleft'>{property.OwnerWalletAddress}</span>
           </h2>
           <h2>
             <h5>Area</h5>
             <span className='gapleft'>  
-            {property[0].propertyId.size} sqft</span>
+            {property.size} sqft</span>
           </h2>
           <h2>
             <h5>Bedrooms</h5>
             <span className='gapleft'>  
-            {property[0].propertyId.beds}
+            {property.beds}
             </span>
           </h2>
           <h2>
             <h5>Bathrooms</h5>
             <span className='gapleft'> 
-            {property[0].propertyId.baths} 
+            {property.baths} 
             </span>
           </h2>
           <h2>
             <h5>Country</h5>
             <span className='gapleft'>   
-            {property[0].propertyId.country}
+            {property.country}
             </span>
           </h2>
           <h2>
             <h5>City</h5>
             <span className='gapleft'>
-              {property[0].propertyId.city}
+              {property.city}
               </span>
           </h2>
           <h2>
             <h5>Address</h5>
             <span className='gapleft'>
-              {property[0].propertyId.propertyAddress}
+              {property.propertyAddress}
               </span>
           </h2>
           <h2>
             <h5>Postal code</h5>
             <span className='gapleft'> 
-            {property[0].propertyId.postalcode}
+            {property.postalcode}
             </span>
           </h2>
           

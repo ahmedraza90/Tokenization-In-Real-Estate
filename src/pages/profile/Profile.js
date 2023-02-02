@@ -51,7 +51,7 @@ function Profile() {
                 "auth-token": token
             }
         }
-        const { data } = await axios.get("http://localhost:3001/api/userTokens", config)
+        const { data } = await axios.get("http://localhost:8000/api/userTokens", config)
         setUserTokens(data)
     }
 
@@ -62,7 +62,7 @@ function Profile() {
                 "auth-token": token
             }
         }
-        const { data } = await axios.get("http://localhost:3001/api/property/userproperties", config)
+        const { data } = await axios.get("http://localhost:8000/api/property/userproperties", config)
         setUserPropertyData(data)
     }
 
@@ -82,7 +82,7 @@ function Profile() {
                     <h4>Email: {userInfo.email}</h4>
                 </div>
                 <div className="profile-picture">
-                    <img src={`http://localhost:3001/public/images/${userInfo.image[0]}`} alt="..." />
+                    <img src={`http://localhost:8000/public/images/${userInfo.image[0]}`} alt="..." />
                 </div>
             </div>
 

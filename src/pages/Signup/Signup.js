@@ -60,7 +60,7 @@ function Signup() {
         },
       }
 
-      const { data } = await axios.post('http://localhost:3001/api/upload', formData, config)
+      const { data } = await axios.post('http://localhost:8000/api/upload', formData, config)
       for (let i = 0; i < data.length; i++) {
         image.push(data[i])
       }

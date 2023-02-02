@@ -4,14 +4,15 @@ import "./Slider.css"
 import { FaArrowAltCircleRight, FaArrowAltCircleLeft } from 'react-icons/fa';
 
 export default function Slider({propertyImages}) {
-
   const [current, setCurrent] = useState(0);
     const length = propertyImages.length;
 
-    const nextSlide = () => {
+    const nextSlide = (e) => {
+      e.preventDefault();
       setCurrent(current === length - 1 ? 0 : current + 1);
     };
-    const prevSlide = () => {
+    const prevSlide = (e) => {
+      e.preventDefault();
       setCurrent(current === 0 ? length - 1 : current - 1);
     };
 
@@ -31,7 +32,7 @@ export default function Slider({propertyImages}) {
             key={index}>
             {index === current && (
               // 
-              <img src={`http://localhost:3001/public/images/${slide}`} alt='travel image' className='image' />
+              <img src={`http://localhost:8000/public/images/${slide}`} alt='travel image' className='image' />
             )}
           </div>
         );

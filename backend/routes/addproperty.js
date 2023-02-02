@@ -76,7 +76,7 @@ router.post('/check', fetchuser, Arrayupload, async (req, res) => {
 router.post("/checkToken", fetchuser, async (req, res) => {
 
     try {
-        listing = await ListingTokens.create({
+        listing = await Property.create({
             user: req.user.id,
             propertyId: mongoose.Types.ObjectId(req.body.propertyId),
             SellerWalletAddress: req.body.SellerWalletAddress,
@@ -96,7 +96,7 @@ router.patch("/update/:id", async (req, res) => {
         const updates = req.body;
         const options = { new: true };
 
-        const result = await ListingTokens.findByIdAndUpdate(id, updates, options);
+        const result = await Property.findByIdAndUpdate(id, updates, options);
 
         res.send(result)
     } catch (error) {
@@ -119,22 +119,34 @@ router.get("/userproperties", fetchuser, async (req, res) => {
 // fetch all properties by id GET /api/property/:id
 router.get("/:id", async (req, res) => {
     try {
-        const listing = await ListingTokens.find({ propertyId: req.params.id }).populate('propertyId');
-        res.json(listing)
+        console.log(req.params.id)
+        const listing = await Property.findOne({ propertyId: req.params.id });
+        console.log(listing)
+        return res.json(listing)
     } catch (e) {
         return res.status(404).json('Product not found')
     }
 })
-
+router.get("/getTokenForSale/:propertyId",async(req,res) =>{
+    try {
+        console.log(req.params.id)
+        const listing = await ListingTokens.find({ propertyId: req.params.propertyId });
+        console.log(listing)
+        return res.json(listing)
+    } catch (e) {
+        return res.status(404).json('Product not found')
+    }
+})
 router.post("/propertyTokens/:id", async (req, res) => {
-    const id = req.params.id
-    const listing = await ListingTokens.findOne({ _id: id });
+    const listing = await ListingTokens.findOne({ _id: req.params.id });
     var a = parseInt(listing.TotalSupplies)
+    console.log("a====",a)
+    console.log("req.body.TotalSupplies====",typeof req.body.TotalSupplies)
 
     if (a != req.body.TotalSupplies) {
-        req.body.TotalSupplies = a - parseInt(req.body.TotalSupplies)
+        req.body.TotalSupplies = a - req.body.TotalSupplies
         const options = { new: true };
-        await ListingTokens.findByIdAndUpdate(id, { TotalSupplies: `${req.body.TotalSupplies}` }, options);
+        await ListingTokens.findByIdAndUpdate(req.params.id, { TotalSupplies: `${req.body.TotalSupplies}` }, options);
         return res.json("successfully updated")
     }
     else {

@@ -10,6 +10,8 @@ import {
     SEARCH_PROPERTY_FAIL,
     SEARCH_PROPERTY_SUCCESS,
     SEARCH_PROPERTY_REQUEST,
+    GET_PROPERTY_TOKENS_FOR_SALE,
+    GET_PROPERTY_TOKENS_FOR_SALE_SUCCESS
 } from '../constants/propertyConstants'
 
 
@@ -27,7 +29,7 @@ export const addProperty = (formData,Pricepertoken,CloneOwner,numberOfSupplies,n
   const SellerWalletAddress = CloneOwner
   
   
-  console.log(Pricepertoken,SellerWalletAddress,numberOfSupplies,numberOfTokenPerWallet)
+ 
   try {
     dispatch({
       type: ADD_PROPERTY_REQUEST
@@ -43,8 +45,7 @@ export const addProperty = (formData,Pricepertoken,CloneOwner,numberOfSupplies,n
    
     const  {data}  = await axios.post('http://localhost:8000/api/property/check', formData ,
     config)
-    console.log("data",data)
-    
+        
     const propertyId = data.addProperty._id
 
     const testData = {
@@ -121,6 +122,24 @@ export const listPropertyDetails = (id) => async (dispatch) => {
   }
 }
 
+export const getTokenForSale = (propertyId) => async (dispatch) => {
+  try {
+    console.log("hellollollo")
+    dispatch({
+       type: GET_PROPERTY_TOKENS_FOR_SALE 
+      })
+
+    const { data } = await axios.get(`http://localhost:8000/api/property/getTokenForSale/${propertyId}`)
+    // console.log(data)
+    dispatch({
+      type: GET_PROPERTY_TOKENS_FOR_SALE_SUCCESS,
+      payload: data
+    })
+  } catch (error) {
+    console.error("hello world")
+  }
+}
+
 // Search properties 
 export const SearchProperties = (key) => async (dispatch) => {
   try {
@@ -129,7 +148,6 @@ export const SearchProperties = (key) => async (dispatch) => {
       })
 
     const { data } = await axios.get(`http://localhost:8000/search/${key}`)
-    console.log(data)
 
     dispatch({
       type: SEARCH_PROPERTY_SUCCESS,

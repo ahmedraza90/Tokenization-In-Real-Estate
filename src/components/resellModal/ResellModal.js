@@ -37,7 +37,7 @@ export default function ResellModal({ setResell, property }) {
         "auth-token": token
       }
     }
-    const {data} = await axios.post('http://localhost:3001/api/property/checkToken', testData, config)
+    const {data} = await axios.post('http://localhost:8000/api/property/checkToken', testData, config)
 
 
     const updateMint = {
@@ -49,7 +49,7 @@ export default function ResellModal({ setResell, property }) {
       }
     } 
 
-    const data1 = await axios.patch(`http://localhost:3001/api/update/${property._id}`,updateMint, newconfig )
+    const data1 = await axios.patch(`http://localhost:8000/api/update/${property._id}`,updateMint, newconfig )
     if(data1.data) {
       setSuccessfull(true)
     }

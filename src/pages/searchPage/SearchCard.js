@@ -10,7 +10,7 @@ function SearchCard({property}) {
          <div className='market-card'>
         <div className='content' >
             <div className='image'>
-                <img src={`http://localhost:3001/public/images/${property.propertyImages[0]}`} alt="" />
+                <img src={`http://localhost:8000/public/images/${property.propertyImages[0]}`} alt="" />
             </div>
             <div className='details'>
                 <div className='pricing'>

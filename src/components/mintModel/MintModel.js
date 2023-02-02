@@ -9,7 +9,7 @@ import MintSuccess from '../MintSuccess/MintSuccess'
 
 
 function MintModel({ setOpenModal, property }) {
-
+  console.log("************************************",property)
   const [count, setCount] = useState(0);
   const [show, setShow] = useState(false)
   const navigate = useNavigate();
@@ -42,7 +42,7 @@ function MintModel({ setOpenModal, property }) {
         ERC1155ABI,
         signer
       );
-      const mint = await ERC1155.mint(`${property[0].propertyId.OwnerWalletAddress}`, `${property[0].propertyId.TokenId}`, `${count}`, { gasLimit: 5000000 })
+      const mint = await ERC1155.mint(`${property.OwnerWalletAddress}`, `${property[0].propertyId.TokenId}`, `${count}`, { gasLimit: 5000000 })
       console.log(mint)
       ERC1155.on("Mint", (me, amount) => {
         console.log(me)
@@ -52,7 +52,7 @@ function MintModel({ setOpenModal, property }) {
 
       const buyerData = {
 
-        quantity: count, ListingTokensId: property[0]._id, BuyerWalletAddress: address, propertyId:property[0].propertyId._id
+        quantity: count, ListingTokensId: property._id, BuyerWalletAddress: address, propertyId: property.propertyId._id
       }
 
       const config = {
@@ -62,7 +62,7 @@ function MintModel({ setOpenModal, property }) {
 
         }
       }
-      const { data } = await axios.post('http://localhost:3001/api/buyerData', buyerData, config)
+      const { data } = await axios.post('http://localhost:8000/api/buyerData', buyerData, config)
 
       if(data){
         setShow(true)
@@ -79,10 +79,10 @@ function MintModel({ setOpenModal, property }) {
         }
       }
       const newData = {
-        "TotalSupplies": property[0].TotalSupplies - count
+        "TotalSupplies": property.TotalSupplies - count
       }
 
-      const data1 = await axios.patch(`http://localhost:3001/api/property/update/${property[0]._id}`, newData, newconfig)
+      const data1 = await axios.patch(`http://localhost:8000/api/property/update/${property._id}`, newData, newconfig)
      
 
     } 
@@ -110,13 +110,13 @@ function MintModel({ setOpenModal, property }) {
           </div>
           <div className="mintModalbody">
             <p>
-              <b>TOKEN STOCK </b>: <span style={{fontSize:"20px", fontWeight:"bold"}}> <u> {property[0].TotalSupplies} </u> </span>{" "}
+              <b>TOKEN STOCK </b>: <span style={{fontSize:"20px", fontWeight:"bold"}}> <u> {property.TotalSupplies} </u> </span>{" "}
             </p>
             <p>
-              <b>Price of One Token </b>: <span style={{fontSize:"20px", fontWeight:"bold"}}> {property[0].PricePerToken} $</span>{" "}
+              <b>Price of One Token </b>: <span style={{fontSize:"20px", fontWeight:"bold"}}> {property.PricePerToken} $</span>{" "}
             </p>
             <h5>
-              {property[0].propertyId.numberOfSupplies - property[0].TotalSupplies} / {property[0].propertyId.numberOfSupplies} minted
+              {property.propertyId.numberOfSupplies - property.TotalSupplies} / {property.propertyId.numberOfSupplies} minted
             </h5>
             <p>
             <button className={count !==0 ? 'decBtnActive': 'decBtnNotActive'} onClick={() => setCount(count - 1)} >
@@ -125,7 +125,7 @@ function MintModel({ setOpenModal, property }) {
             <span className="tokenValue"> <b> {count} </b></span>
 
             <button
-              className={count !== parseInt(property[0].TotalSupplies) ? 'incBtnActive':'incBtnNotActive' }
+              className={count !== parseInt(property.TotalSupplies) ? 'incBtnActive':'incBtnNotActive' }
               onClick={() => setCount(count + 1)}
             >
               +

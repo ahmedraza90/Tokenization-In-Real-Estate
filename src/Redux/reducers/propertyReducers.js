@@ -13,7 +13,11 @@ import {
     LIST_USER_SPECIFIC_PROPERTY_FAIL,
     SEARCH_PROPERTY_REQUEST,
     SEARCH_PROPERTY_SUCCESS,
-    SEARCH_PROPERTY_FAIL
+    SEARCH_PROPERTY_FAIL,
+    GET_PROPERTY_TOKENS_FOR_SALE,
+    GET_PROPERTY_TOKENS_FOR_SALE_SUCCESS,
+    GET_PROPERTY_TOKENS_FOR_SALE_FAIL
+    
 } from '../constants/propertyConstants'
 
 
@@ -70,7 +74,19 @@ export const propertyDetailsReducer = (
     }
 }
 
-
+export const tokenDetailsReducer = (
+    state = {}, action) => {
+    switch (action.type) {
+        case GET_PROPERTY_TOKENS_FOR_SALE :
+            return { loading: true }
+        case GET_PROPERTY_TOKENS_FOR_SALE_SUCCESS:
+            return { loading: false, tokens: action.payload }
+        case GET_PROPERTY_TOKENS_FOR_SALE_FAIL:
+            return { loading: false, error: action.payload }
+        default:
+            return state
+    }
+} 
 
 export const propertySearchReducer = (
     state = {}, action) => {

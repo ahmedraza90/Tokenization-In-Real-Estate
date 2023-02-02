@@ -7,7 +7,7 @@ import SuccessPurchase from '../success purchase/SuccessPurchase';
 
 
 export default function TokenModal({setOpenModal, property}) {
-
+  console.log("____________________________________________",property)
  const [show, setShow] = useState(false)
  const [count, setCount] = useState(0)
 
@@ -23,21 +23,20 @@ if(a){
         method: "eth_requestAccounts",
       });
       const address = accounts[0];
-      console.log(ERC1155Address)
       let provider = new ethers.providers.Web3Provider(window.ethereum);
       let signer = provider.getSigner();
-      const ERC1155 = new ethers.Contract(
-        "0x68B03e17443F4cBbb5958e621264fFED3F1A0b41",
-        ERC1155ABI,
-        signer
-      );
-      const transfer = await ERC1155.transfer(`${property.SellerWalletAddress}`, `${address}`, `${property.propertyId.TokenId}`, `${count}`, { gasLimit: 5000000 })
-      console.log(transfer)
-      ERC1155.on("Resell", (from, to, amount) => {
-        console.log(from)
-        console.log(to)
-        console.log(amount)
-      })
+      // const ERC1155 = new ethers.Contract(
+      //   "0x68B03e17443F4cBbb5958e621264fFED3F1A0b41",
+      //   ERC1155ABI,
+      //   signer
+      // );
+      // const transfer = await ERC1155.transfer(`${property.SellerWalletAddress}`, `${address}`, `${property.propertyId.TokenId}`, `${count}`, { gasLimit: 5000000 })
+      // console.log(transfer)
+      // ERC1155.on("Resell", (from, to, amount) => {
+      //   console.log(from)
+      //   console.log(to)
+      //   console.log(amount)
+      // })
 
       const buyerData = {
 
@@ -52,7 +51,7 @@ if(a){
 
         }
       }
-      const { data } = await axios.post('http://localhost:3001/api/buyerData', buyerData, config)
+      const { data } = await axios.post('http://localhost:8000/api/buyerData', buyerData, config)
       if(data){
         setShow(true)
       }
@@ -70,7 +69,8 @@ if(a){
           'Content-Type': 'application/json',
         }
       }
-      const { data1 } = await axios.post(`http://localhost:3001/api/property/propertyTokens/${property._id}`, updateListing, newconfig)
+      console.log(property._id)
+      const { data1 } = await axios.post(`http://localhost:8000/api/property/propertyTokens/${property._id}`, updateListing, newconfig)
 
 
 

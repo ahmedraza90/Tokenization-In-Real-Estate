@@ -12,7 +12,8 @@ import {
     allPropertiesReducer,
     propertyDetailsReducer,
     userSpecificPropertiesReducer,
-    propertySearchReducer
+    propertySearchReducer,
+    tokenDetailsReducer
 } from './reducers/propertyReducers'
 
 import {
@@ -28,7 +29,8 @@ const reducer = combineReducers({
     userSpecificProperties: userSpecificPropertiesReducer,
     propertyDetails: propertyDetailsReducer,
     search: propertySearchReducer,
-    wallet:walletConnect
+    wallet:walletConnect,
+    tokenDetails:tokenDetailsReducer
 })
 
 const userInfoFromStorage = localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : null

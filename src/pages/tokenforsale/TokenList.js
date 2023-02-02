@@ -4,25 +4,25 @@ import { faCircleUser } from '@fortawesome/free-solid-svg-icons'
 import './TokensForSale.css'
 import Modal from '../../components/buyTokensModal/TokenModal'
 
-export default function TokenList({property}) {
+export default function TokenList({tokens}) {
   const [modalOpen, setModalOpen] = useState(false);
-
+ 
   return (
     <>
-    <p key={property._id} className='tokensforsale'>
+    <p key={tokens._id} className='tokensforsale'>
            <FontAwesomeIcon icon={faCircleUser} className="userIcon" />
            <span>
-             ID: {property.propertyId.user}
+             ID: {tokens.user}
            </span>
 
            <span>
-            No of Tokens: {property.TotalSupplies}
+            No of Tokens: {tokens.TotalSupplies}
            </span>
 
         <button className='buytokensbtn' onClick={() => {
             setModalOpen(true);
           }}>Buy Tokens</button>
-          {modalOpen && <Modal setOpenModal={setModalOpen} property={property} />}
+          {modalOpen && <Modal setOpenModal={setModalOpen} property={tokens} />}
         </p>
     </>
   )

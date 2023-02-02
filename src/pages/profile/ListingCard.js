@@ -8,7 +8,7 @@ function ListingCard({ property }) {
 			<li className="cards_item">
 				<div className="card">
 					<div className="card_image">
-						<img src={`http://localhost:3001/public/images/${property.propertyImages[0]}`} />
+						<img src={`http://localhost:8000/public/images/${property.propertyImages[0]}`} />
 					</div>
 					<div className="card_content">
 						<div className="card_text">

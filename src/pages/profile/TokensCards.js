@@ -10,7 +10,7 @@ function TokensCards({ tokens }) {
             <li className="cards_item">
                 <div className="card">
                     <div className="card_image">
-                        <img src={`http://localhost:3001/public/images/${tokens.propertyId.propertyImages[0]}`} />
+                        <img src={`http://localhost:8000/public/images/${tokens.propertyId.propertyImages[0]}`} />
                     </div>
                     <div className="card_content">
                         <div className="card_text">

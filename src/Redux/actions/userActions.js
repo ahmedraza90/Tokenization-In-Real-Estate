@@ -23,7 +23,6 @@ export const register = (firstName,lastName, email, password, image) => async (d
     }
     const  {data}  = await axios.post('http://localhost:8000/api/auth/register', {firstName,lastName, email, password, image} ,
      config)
-    console.log(data)
 
     dispatch({
       type: USER_REGISTER_SUCCESS,
