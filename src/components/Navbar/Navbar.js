@@ -43,7 +43,7 @@ const Navbar = () => {
       <input type="checkbox" id="check" />
       <nav>
         <div className="icon">
-          <img src={Logo} alt="logo" />
+          <NavLink to="/"><img src={Logo} alt="logo" /></NavLink>
         </div>
 
           <div className="search_box">
