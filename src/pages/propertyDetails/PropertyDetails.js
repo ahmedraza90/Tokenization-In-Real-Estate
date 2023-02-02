@@ -34,11 +34,12 @@ function PropertyDetails() {
 
     const propertyDetails = useSelector(state => state.propertyDetails)
     const { loading, error, property } = propertyDetails
+    console.log(property)
 return (
         <>
             <Navbar />
             {property && <Slider propertyImages={property.propertyImages} />}
-            {data && openModal && <MintModel setOpenModal={setOpenModal} property={property} />}
+            {property && openModal && <MintModel setOpenModal={setOpenModal} property={property} />}
 
             <p className='mintbtn' onClick={() => {
                 setOpenModal(true);

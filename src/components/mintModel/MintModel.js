@@ -42,17 +42,17 @@ function MintModel({ setOpenModal, property }) {
         ERC1155ABI,
         signer
       );
-      const mint = await ERC1155.mint(`${property.OwnerWalletAddress}`, `${property[0].propertyId.TokenId}`, `${count}`, { gasLimit: 5000000 })
+      const mint = await ERC1155.mint(`${property.OwnerWalletAddress}`, `${property.TokenId}`, `${count}`, { gasLimit: 5000000 })
       console.log(mint)
       ERC1155.on("Mint", (me, amount) => {
         console.log(me)
         console.log(amount)
       })
 
-
+console.log(property.TotalSupplies);
       const buyerData = {
 
-        quantity: count, ListingTokensId: property._id, BuyerWalletAddress: address, propertyId: property.propertyId._id
+        quantity: count, ListingTokensId: property._id, BuyerWalletAddress: address, propertyId: property._id
       }
 
       const config = {
@@ -116,7 +116,7 @@ function MintModel({ setOpenModal, property }) {
               <b>Price of One Token </b>: <span style={{fontSize:"20px", fontWeight:"bold"}}> {property.PricePerToken} $</span>{" "}
             </p>
             <h5>
-              {property.propertyId.numberOfSupplies - property.TotalSupplies} / {property.propertyId.numberOfSupplies} minted
+              {property.numberOfSupplies - property.TotalSupplies} / {property.numberOfSupplies} minted
             </h5>
             <p>
             <button className={count !==0 ? 'decBtnActive': 'decBtnNotActive'} onClick={() => setCount(count - 1)} >
@@ -133,7 +133,7 @@ function MintModel({ setOpenModal, property }) {
             </p>
           </div>
           <div className="mintModalfooter">
-            {parseInt(property[0].TotalSupplies) === 0 ? <p style={{fontSize:"large", backgroundColor:"crimson", borderRadius:"20px", padding:"10px", color:"white"}}>All tokens are minted</p>:
+            {parseInt(property.TotalSupplies) === 0 ? <p style={{fontSize:"large", backgroundColor:"crimson", borderRadius:"20px", padding:"10px", color:"white"}}>All tokens are minted</p>:
             <button className={count === 0 ? "noevent":"mintModalcalculateBtn"} onClick={Mint}>
               Mint
             </button>
