@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import './Profile.css'
 
 function ListingCard({ property }) {
+	console.log(property);
 	return (
 		<>
 			<li className="cards_item">

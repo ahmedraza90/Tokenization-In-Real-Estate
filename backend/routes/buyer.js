@@ -68,7 +68,8 @@ router.get("/userTokens", fetchuser, async(req,res)=>{
 router.patch("/update/:id", async (req, res) => {
     const id = req.params.id
     const listing = await Buyer.findOne({ _id: id });
-    var a = parseInt(listing.quantity)
+    var a = parseInt(listing?.quantity)
+    console.log(req);
 
     if (a !== 0) {
         req.body.quantity = a - parseInt(req.body.quantity)

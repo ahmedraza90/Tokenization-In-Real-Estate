@@ -28,8 +28,20 @@ export default function ResellModal({ setResell, property }) {
     const signer = provider.getSigner()
     const CurrentWalletAddress = await signer.getAddress()
     const testData = {
-      Pricepertoken: price, SellerWalletAddress: CurrentWalletAddress, numberOfSupplies: count, propertyId: property.propertyId._id
+      Pricepertoken: price, SellerWalletAddress: CurrentWalletAddress, numberOfSupplies: count, propertyId: property.propertyId._id,
+      numberOfSupplies  :property.propertyId.numberOfSupplies,
+postalcode :property.propertyId.postalcode,
+city :property.propertyId.city,
+baths :property.propertyId.baths,
+beds :property.propertyId.beds,
+propertyAddress :property.propertyId.propertyAddress,
+ownerName :property.propertyId.ownerName,
+size :property.propertyId.size,
+country :property.propertyId.country,
+propertyPrice :property.propertyId.propertyPrice,
+
     }
+    console.log(testData);
 
     const config = {
       headers: {
@@ -38,7 +50,6 @@ export default function ResellModal({ setResell, property }) {
       }
     }
     const {data} = await axios.post('http://localhost:8000/api/property/checkToken', testData, config)
-
 
     const updateMint = {
       quantity: count
@@ -49,11 +60,12 @@ export default function ResellModal({ setResell, property }) {
       }
     } 
 
-    const data1 = await axios.patch(`http://localhost:8000/api/update/${property._id}`,updateMint, newconfig )
+    const data1 = await axios.patch(`http://localhost:8000/api/update/${property.propertyId._id}`,updateMint, newconfig )
     if(data1.data) {
       setSuccessfull(true)
     }
   }
+  console.log(property)
   return (
     <>
     {successfull ?  <ListSuccess count={count} propertyId={property.propertyId._id}/>:
@@ -102,3 +114,10 @@ export default function ResellModal({ setResell, property }) {
     </>
   )
 }
+// numberOfSupplies  :property.propertyId.numberOfSupplies,
+// postalcode :property.propertyId.postalcode,
+// city :property.propertyId.city,
+// baths :property.propertyId.baths,
+// beds :property.propertyId.beds,
+// propertyAddress :property.propertyId.propertyAddress,
+// ownerName :property.propertyId.ownerName,

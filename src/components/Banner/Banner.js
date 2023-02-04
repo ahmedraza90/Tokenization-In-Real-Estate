@@ -11,7 +11,7 @@ function Banner() {
         <h1>Fractional And Frictionless RealEstate Investment</h1>
         <p>For the first time, investors around the globe can buy into the real estate market through fully-compliant, fractional, tokenized ownership. Powered by blockchain.</p>
         <div className='getStarted'>
-        <Link to="/login" className="getStartedbtn">Get Started</Link>
+        <Link to="/marketplace" className="getStartedbtn">Get Started</Link>
         </div>
         </div>
         <div className="pic">

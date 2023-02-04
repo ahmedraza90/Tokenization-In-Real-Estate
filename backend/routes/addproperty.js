@@ -47,7 +47,7 @@ router.post('/check', fetchuser, Arrayupload, async (req, res) => {
         for (let i = 0; i < req.files.propertyDocuments.length; i++) {
             arrPropertyDocuments.push(req.files.propertyDocuments[i].originalname)
         }
-        addProperty = await Property.create({
+        let addProperty = await Property.create({
             user: req.user.id,
             ownerName: req.body.ownerName,
             PropertyContractAddress: req.body.PropertyContractAddress,
@@ -83,6 +83,16 @@ router.post("/checkToken", fetchuser, async (req, res) => {
             TotalSupplies: req.body.numberOfSupplies,
             PricePerToken: req.body.Pricepertoken,
             NumberOfTokenPerWallet: req.body.numberOfTokenPerWallet,
+            numberOfSupplies: req.body.numberOfSupplies,
+            postalcode: req.body.postalcode,
+            city: req.body.city,
+            baths: req.body.baths,
+            beds: req.body.beds,
+            propertyAddress: req.body.propertyAddress,
+            ownerName: req.body.ownerName,
+            size: req.body.size,
+            country: req.body.country,
+            propertyPrice: req.body.propertyPrice,
         })
         res.json({ listing })
     } catch (error) {
@@ -127,7 +137,7 @@ router.get("/:id", async (req, res) => {
         return res.status(404).json('Product not found')
     }
 })
-router.get("/getTokenForSale/:propertyId",async(req,res) =>{
+router.get("/getTokenForSale/:propertyId", async (req, res) => {
     try {
         console.log(req.params.id)
         const listing = await ListingTokens.find({ propertyId: req.params.propertyId });
@@ -140,8 +150,8 @@ router.get("/getTokenForSale/:propertyId",async(req,res) =>{
 router.post("/propertyTokens/:id", async (req, res) => {
     const listing = await ListingTokens.findOne({ _id: req.params.id });
     var a = parseInt(listing.TotalSupplies)
-    console.log("a====",a)
-    console.log("req.body.TotalSupplies====",typeof req.body.TotalSupplies)
+    console.log("a====", a)
+    console.log("req.body.TotalSupplies====", typeof req.body.TotalSupplies)
 
     if (a != req.body.TotalSupplies) {
         req.body.TotalSupplies = a - req.body.TotalSupplies
