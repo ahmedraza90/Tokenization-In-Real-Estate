@@ -1,3 +1,6 @@
+::placeholder{
+  color:white
+}
 .labels{
   color: lightgray;
   float: left;
@@ -37,4 +40,23 @@
   text-decoration: none;
   font-size: 18px;
 }
+.inputs{
+  color: white;
+ 
+}
+.form-inputs{
+  align-items: center;
+}
+.form-styles{
+max-width: 40%;
+}
 
+  @media (width < 900px){
+    .form-inputs{
+    flex-direction: column;
+    width: auto;
+  }
+  .form-styles{
+    max-width: 100%;
+  }
+}

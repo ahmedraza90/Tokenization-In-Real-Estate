@@ -1,6 +1,12 @@
+::placeholder{
+    color:white
+}
+.inputs{
+    color: white;
+  }
 .signup-form{
     background-color: #182b3c;
-    box-shadow: 10px 3px 38px 0px rgba(0,0,0,0.3);
+    box-shadow: 10px 3px 38px 0px rgba(26, 27, 27, 0.525);
     width:500px;
     margin:5px auto;
     border-radius:5px;

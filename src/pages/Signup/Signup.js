@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom'
 import './Signup.css'
 import Spinner from '../../components/spinner/Spinner'
 import SuccessModal from '../../components/success modal/SuccessModal'
-
+import Navbar from '../../components/Navbar/Navbar'
 function Signup() {
 
   const navigate = useNavigate()
@@ -91,6 +91,10 @@ function Signup() {
   return (
     <>
       {loading && <Spinner />}
+      <Navbar/>
+      <br />
+    <br />
+    <br />
       <div className='signup-box'>
         <form className="signup-form" onSubmit={submitHandler} encType="multipart/form-data">
           <div className="top">

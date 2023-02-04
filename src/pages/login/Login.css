@@ -1,4 +1,9 @@
-
+::placeholder{
+  color:white
+}
+.inputs{
+  color: white;
+}
     .form{
       width:400px;
       text-align: center;

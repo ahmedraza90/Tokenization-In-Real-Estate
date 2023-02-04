@@ -210,20 +210,24 @@ function AddProperty() {
   
   return (
     <>
+    <Navbar/>
+
       <div>
         {successfull && <SuccessModal />}
         {/* {uploading && <Spinner />} */}
         {error && <div className="error">{message}</div>}
 
 
-        <form className="property-form"  encType="multipart/form-data">
+        <form className="property-form"  encType="multipart/form-data" style={{width:"100vw"}}>
 
           <div className="top-heading">
             <h1>Add Property</h1>
           </div>
 
-          <br />
-          <label style={{ color: "lightgray", float: "left", marginBottom:"-21px"}}>Enter Owner Name</label>
+          
+          <div className="form-inputs" style={{display:"flex",width:"100%",justifyContent: "space-evenly"}}>
+          <div className="form-styles">
+            <label style={{ color: "lightgray", float: "left", marginBottom:"-21px",marginTop:"16px"}}>Enter Owner Name</label>
           <input
             type="text"
             name="ownerName"
@@ -285,8 +289,7 @@ function AddProperty() {
             multiple
             onChange={(e) => setPropertyImages(e.target.files)}
           />
-
-           <label className="labels"> Select property documents</label>
+                     <label className="labels"> Select property documents</label>
           <input
             type="file"
             id="image-file"
@@ -295,7 +298,9 @@ function AddProperty() {
             multiple
             onChange={(e) => setPropertyDocuments(e.target.files)}
           />
-
+</div>
+          <div className="form-styles">
+        
            <label className="labels"> Enter no of beds</label>
           <input
             type="number"
@@ -359,7 +364,8 @@ function AddProperty() {
             required
             onChange={(e) => setPostalCode(e.target.value)}
           />
-
+</div>
+</div>
           <br />
           <button
             className="logbtn"

@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { login } from '../../Redux/actions/userActions'
 import './Login.css'
 import Spinner from '../../components/spinner/Spinner'
+import Navbar from '../../components/Navbar/Navbar'
 
 function Login() {
   const navigate = useNavigate()
@@ -33,6 +34,10 @@ function Login() {
   
   return (
     <>
+    <Navbar></Navbar>
+    <br />
+    <br />
+    <br />
       {loading && <Spinner />}
       <div className='login-card'>
         <form className="form" onSubmit={submitHandler} >
