@@ -40,8 +40,9 @@ function Profile() {
        
     useEffect(() => {
      
-            fetchUserProperties()
+            // fetchUserProperties()
             fetchUserTokens()
+            fetchUserListing()
         
     }, [])
 
@@ -52,20 +53,21 @@ function Profile() {
             }
         }
         const { data } = await axios.get("http://localhost:8000/api/userTokens", config)
-        console.log(data)
+        // console.log(data)
         setUserTokens(data)
     }
 
-
-    const fetchUserProperties = async () => {
+    const fetchUserListing = async () => {
         const config = {
             headers: {
                 "auth-token": token
             }
         }
-        const { data } = await axios.get("http://localhost:8000/api/property/userproperties", config)
+        const { data } = await axios.get(`http://localhost:8000/api/ListingTokens/${userInfo.id}`, config)
+        console.log("Listings",data)
         setUserPropertyData(data)
     }
+    console.log("Listings",userPropertyData)
 
     return (
         <>
@@ -107,8 +109,9 @@ function Profile() {
             {showListing && userPropertyData && userPropertyData.length === 0 ? <p className='Notok'>No Listings ..... </p> : ""}
             <div>
                 <div className="main">
+                      {showListing &&  <h1 style={{color:"white"}}>Tokens Listed For Sale</h1>}
                     <ul className="cards">
-                        {showListing && userPropertyData && userPropertyData.map((property) => (
+                        {showListing && userPropertyData && [userPropertyData].map((property) => (
                             <ListingCard key={property._id} property={property} />
                         )
                         )}

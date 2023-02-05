@@ -9,13 +9,14 @@ function ListingCard({ property }) {
 			<li className="cards_item">
 				<div className="card">
 					<div className="card_image">
-						<img src={`http://localhost:8000/public/images/${property.propertyImages[0]}`} />
+						<img src={`http://localhost:8000/public/images/${property[0].propertyId.propertyImages[0]}`} />
 					</div>
 					<div className="card_content">
 						<div className="card_text">
-							<p> <span className='tokenDetails'>  owner Name:</span> {property.ownerName}</p>
-							<p> <span className='tokenDetails'> property Price:</span> {property.propertyPrice}</p>
-							<p> <span className='tokenDetails'> Address:</span> {property.propertyAddress}</p>
+							<p> <span className='tokenDetails'>  owner Name:</span> {property[0].propertyId.ownerName}</p>
+							<p> <span className='tokenDetails'> property Price:</span> {property[0].propertyId.propertyPrice}</p>
+							<p> <span className='tokenDetails'> property TotalSupplies:</span> {property[0].TotalSupplies}</p>
+							<p> <span className='tokenDetails'> Address:</span> {property[0].propertyId.propertyAddress}</p>
 						</div>
 						<Link to={`/propertydetails/${property._id}`} className="viewBtn">View</Link>
 					</div>

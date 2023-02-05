@@ -2,6 +2,7 @@ const express = require('express')
 var mongoose = require('mongoose');
 const Property = require('../models/Property')
 const ListingTokens = require('../models/ListingTokens')
+const Buyer = require('../models/Buyer')
 const { validationResult } = require('express-validator');
 const fetchuser = require('../middleware/fetchuser');
 const router = express.Router()
@@ -76,24 +77,15 @@ router.post('/check', fetchuser, Arrayupload, async (req, res) => {
 router.post("/checkToken", fetchuser, async (req, res) => {
 
     try {
-        listing = await Property.create({
-            user: req.user.id,
+        console.log(req.body);
+        listing = await ListingTokens.create({
+            user: mongoose.Types.ObjectId(req.body.user),
             propertyId: mongoose.Types.ObjectId(req.body.propertyId),
             SellerWalletAddress: req.body.SellerWalletAddress,
-            TotalSupplies: req.body.numberOfSupplies,
-            PricePerToken: req.body.Pricepertoken,
-            NumberOfTokenPerWallet: req.body.numberOfTokenPerWallet,
-            numberOfSupplies: req.body.numberOfSupplies,
-            postalcode: req.body.postalcode,
-            city: req.body.city,
-            baths: req.body.baths,
-            beds: req.body.beds,
-            propertyAddress: req.body.propertyAddress,
-            ownerName: req.body.ownerName,
-            size: req.body.size,
-            country: req.body.country,
-            propertyPrice: req.body.propertyPrice,
+            TotalSupplies: req.body.TotalSupplies,
+            PricePerToken: req.body.PricePerToken,
         })
+        await Buyer.findByIdAndUpdate(req.body.BuyerId, {quantity : req.body.RemainingTokens});
         res.json({ listing })
     } catch (error) {
         console.log(error)

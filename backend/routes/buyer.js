@@ -1,6 +1,7 @@
 const express = require('express')
 var mongoose = require('mongoose');
 const Buyer  = require('../models/Buyer')
+const ListingTokens  = require('../models/ListingTokens')
 const fetchuser = require('../middleware/fetchuser');
 const router = express.Router()
 
@@ -58,6 +59,17 @@ router.get("/getbuyerdata", fetchuser, async(req,res)=>{
 router.get("/userTokens", fetchuser, async(req,res)=>{
     try {
         const use = await Buyer.find({ user: req.user.id}).populate('propertyId')
+        res.json(use)
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).send("Internal Server Error");
+    }
+})
+router.get("/ListingTokens/:id",  async(req,res)=>{
+    try {
+        
+        console.log(req.params.id);
+        const use = await ListingTokens.find({ user: req.params.id}).populate('propertyId')
         res.json(use)
     } catch (error) {
         console.error(error.message);
