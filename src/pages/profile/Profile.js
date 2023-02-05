@@ -52,6 +52,7 @@ function Profile() {
             }
         }
         const { data } = await axios.get("http://localhost:8000/api/userTokens", config)
+        console.log(data)
         setUserTokens(data)
     }
 

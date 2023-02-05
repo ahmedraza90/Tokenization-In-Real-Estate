@@ -44,9 +44,9 @@ function AddProperty() {
   const [postalcode, setPostalCode] = useState("");
   const [ETHpriceToUSD, setETHpriceToUSD] = useState(0);
   const [message, setMessage] = useState("");
-  // const [uploading, setUploading] = useState(false);
+  const [uploading, setUploading] = useState(false);
   // const [CloneAddress, setCloneAddress] = useState(null);
-  const [CloneOwner, setCloneOwner] = useState(null);
+  // const [CloneOwner, setCloneOwner] = useState(null);
   const [Pricepertoken, setPricepertoken] = useState(null);
   const [successfull, setSuccessfull] = useState(false);
   
@@ -103,10 +103,11 @@ function AddProperty() {
   };
   useEffect(() => {
     getEth();
-  }, [CloneOwner, Pricepertoken]);
+  }, [Pricepertoken]);
 
 
   const submitHandler = async (e) => {
+    setUploading(true);
     console.log("geee")
     if (e && e.preventDefault) {
       e.preventDefault();
@@ -114,8 +115,6 @@ function AddProperty() {
     const accounts = await window.ethereum.request({
       method: "eth_requestAccounts",
     });
-    const address = accounts[0];
-    setCloneOwner(accounts[0]);
     const formData = new FormData();
     const arr = [];
     for (let i = 0; i < propertyImages.length; i++) {
@@ -134,7 +133,7 @@ function AddProperty() {
     }
     formData.append("ownerName", ownerName);
     // formData.append("PropertyContractAddress", CloneAddress);
-    formData.append("OwnerWalletAddress", CloneOwner);
+    formData.append("OwnerWalletAddress", accounts[0]);
     formData.append("numberOfSupplies", numberOfSupplies);
     formData.append("propertyAddress", propertyAddress);
     formData.append("propertyPrice", propertyPrice);
@@ -150,11 +149,12 @@ function AddProperty() {
           addProperty(
             formData,
             Pricepertoken,
-            CloneOwner,
+            accounts[0],
             numberOfSupplies,
             numberOfTokenPerWallet
           )
     );
+    setUploading(false);
   //   if (CloneAddress !== null && CloneOwner !== null) {
   //     if (
   //       ownerName &&
@@ -214,7 +214,7 @@ function AddProperty() {
 
       <div>
         {successfull && <SuccessModal />}
-        {/* {uploading && <Spinner />} */}
+        {uploading && <Spinner />}
         {error && <div className="error">{message}</div>}
 
 
