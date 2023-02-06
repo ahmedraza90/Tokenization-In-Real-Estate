@@ -16,6 +16,7 @@ nav > ol {
   display: flex;
   list-style: none;
   margin: auto 0;
+  align-items: center;
 }
 nav > ol > li > a {
   color: #fff;
@@ -131,6 +132,7 @@ input[type="checkbox"] {
     width: 100%;
     
   }
+
   nav ol li a {
     color: #fff;
     font-size: 20px;

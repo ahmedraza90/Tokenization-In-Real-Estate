@@ -3,11 +3,15 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircleUser } from '@fortawesome/free-solid-svg-icons'
 import './Bid.css'
 import image from '../../assets/bed.jpg'
+import { useSelector } from 'react-redux'
 
 
 
 
 function Bid() {
+  const propertyDetails = useSelector(state => state.propertyDetails)
+  const { loading, error, property } = propertyDetails
+  console.log(property.propertyImages[0]);
   return (
     <>
     <h3 className='bidding-date' id='bid-date1'>Bidding Will End at : Thursday, 31 March 2022  1:22 am</h3>
@@ -24,7 +28,7 @@ function Bid() {
         <h3 className='bidding-date' id='bid-date2'>Bidding Will End at : Thursday, 31 March 2022  1:22 am</h3>
         <div className="bidding-form">
           <div className='house-image'>
-          <img src={image}/>
+          <img src={`http://localhost:8000/public/images/${property?.propertyImages[0]}`}/>
           </div>
           <div className="form-fields">
             <span>

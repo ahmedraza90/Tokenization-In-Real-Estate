@@ -9,8 +9,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { addProperty } from "../../Redux/actions/propertyActions";
 import "./AddProperty.css";
-import SuccessModal from "../../components/success modal/SuccessModal";
 import Spinner from "../../components/spinner/Spinner";
+import SuccessModal from "../../components/success modal/SuccessModal";
 import Navbar from "../../components/Navbar/Navbar";
 
 function AddProperty() {

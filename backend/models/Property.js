@@ -39,6 +39,18 @@ const PropertyDetailsSchema = new Schema({
         type:Array,
         required:true,
     },
+    isRented:{
+        type:Boolean,
+        default:false,
+    },
+    isRentable:{
+        type:Boolean,
+        default:false,
+    },
+    inAuction:{
+        type:Boolean,
+        default:false,
+    },
     beds: {
         type: String,
         required: true,

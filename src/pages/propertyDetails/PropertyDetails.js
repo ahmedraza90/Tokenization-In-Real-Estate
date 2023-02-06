@@ -10,10 +10,12 @@ import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import Slider from '../../components/slider/Slider'
 import MintModel from '../../components/mintModel/MintModel'
+import RentableForm from '../RentableForm/RentableForm'
 import axios from 'axios'
 
 function PropertyDetails() {
     const [openModal, setOpenModal] = useState(false)
+    const [openRentModal, setOpenRentModal] = useState(false)
     const { id } = useParams()
     var [data, setData] = useState()
     // if (data == undefined) {
@@ -40,10 +42,15 @@ return (
             <Navbar />
             {property && <Slider propertyImages={property.propertyImages} />}
             {property && openModal && <MintModel setOpenModal={setOpenModal} property={property} />}
+            {property && openRentModal && <RentableForm setOpenRentModal={setOpenRentModal} property={property} />}
 
             <p className='mintbtn' onClick={() => {
                 setOpenModal(true);
             }}>Mint</p>
+            
+            <p className='mintbtn' onClick={() => {
+                setOpenRentModal(true);
+            }}>Rent Your Property</p>
 
             <CenterNavbar id={id} />
             <Footer />
