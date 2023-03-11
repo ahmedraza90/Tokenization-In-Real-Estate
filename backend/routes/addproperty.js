@@ -179,52 +179,8 @@ router.get("/getBids/:id", async (req, res) => {
     }
 })
 
-// // add property using route '/api/property/check' Auth required
-// router.post('/check', fetchuser, Arrayupload, async (req, res) => {
-//     console.log("_________________-",req.body)
-//     // if there are errors return bad request and errors
-//     const errors = validationResult(req);
-//     if (!errors.isEmpty()) {
-//         return res.status(400).json({ errors: errors.array() });
-//     }
-//     try {
-//         const arrPropertyImages = []
-//         for (let i = 0; i < req.files.propertyImages.length; i++) {
-//             arrPropertyImages.push(req.files.propertyImages[i].originalname)
-//         }
-//         const arrPropertyDocuments = []
-//         for (let i = 0; i < req.files.propertyDocuments.length; i++) {
-//             arrPropertyDocuments.push(req.files.propertyDocuments[i].originalname)
-//         }
-//         let addProperty = await Property.create({
-//             user: req.user.id,
-//             ownerName: req.body.ownerName,
-//             PropertyContractAddress: req.body.PropertyContractAddress,
-//             OwnerWalletAddress: req.body.OwnerWalletAddress,
-//             propertyAddress: req.body.propertyAddress,
-//             propertyPrice: req.body.propertyPrice,
-//             propertyImages: arrPropertyImages,
-//             propertyDocuments: arrPropertyDocuments,
-//             beds: req.body.beds,
-//             baths: req.body.baths,
-//             size: req.body.size,
-//             country: req.body.country,
-//             city: req.body.city,
-//             postalcode: req.body.postalcode,
-//             numberOfSupplies: req.body.numberOfSupplies,
-//             isRentable : req.body.isRentable
-
-
-//         })
-//         res.json({ addProperty })
-//     } catch (error) {
-//         console.error(error.message)
-//         res.status(500).send("internal server error")
-//     }
-// })
 // add property using route '/api/property/check' Auth required
-// route: /addProperty
-router.post('/addProperty', async (req, res) => {
+router.post('/check', fetchuser, Arrayupload, async (req, res) => {
     console.log("_________________-",req.body)
     // if there are errors return bad request and errors
     const errors = validationResult(req);
@@ -232,23 +188,23 @@ router.post('/addProperty', async (req, res) => {
         return res.status(400).json({ errors: errors.array() });
     }
     try {
-        // const arrPropertyImages = []
-        // for (let i = 0; i < req.files.propertyImages.length; i++) {
-        //     arrPropertyImages.push(req.files.propertyImages[i].originalname)
-        // }
-        // const arrPropertyDocuments = []
-        // for (let i = 0; i < req.files.propertyDocuments.length; i++) {
-        //     arrPropertyDocuments.push(req.files.propertyDocuments[i].originalname)
-        // }
+        const arrPropertyImages = []
+        for (let i = 0; i < req.files.propertyImages.length; i++) {
+            arrPropertyImages.push(req.files.propertyImages[i].originalname)
+        }
+        const arrPropertyDocuments = []
+        for (let i = 0; i < req.files.propertyDocuments.length; i++) {
+            arrPropertyDocuments.push(req.files.propertyDocuments[i].originalname)
+        }
         let addProperty = await Property.create({
-            user: req.body.user,
+            user: req.user.id,
             ownerName: req.body.ownerName,
             PropertyContractAddress: req.body.PropertyContractAddress,
             OwnerWalletAddress: req.body.OwnerWalletAddress,
             propertyAddress: req.body.propertyAddress,
             propertyPrice: req.body.propertyPrice,
-            // propertyImages: arrPropertyImages,
-            // propertyDocuments: arrPropertyDocuments,
+            propertyImages: arrPropertyImages,
+            propertyDocuments: arrPropertyDocuments,
             beds: req.body.beds,
             baths: req.body.baths,
             size: req.body.size,
@@ -260,13 +216,59 @@ router.post('/addProperty', async (req, res) => {
 
 
         })
-        console.log(addProperty)
         res.json({ addProperty })
     } catch (error) {
         console.error(error.message)
         res.status(500).send("internal server error")
     }
 })
+
+// add property using route '/api/property/check' Auth required
+// route: /addProperty
+// router.post('/addProperty', async (req, res) => {
+//     console.log("_________________-",req.body)
+//     // if there are errors return bad request and errors
+//     const errors = validationResult(req);
+//     if (!errors.isEmpty()) {
+//         return res.status(400).json({ errors: errors.array() });
+//     }
+//     try {
+//         // const arrPropertyImages = []
+//         // for (let i = 0; i < req.files.propertyImages.length; i++) {
+//         //     arrPropertyImages.push(req.files.propertyImages[i].originalname)
+//         // }
+//         // const arrPropertyDocuments = []
+//         // for (let i = 0; i < req.files.propertyDocuments.length; i++) {
+//         //     arrPropertyDocuments.push(req.files.propertyDocuments[i].originalname)
+//         // }
+//         let addProperty = await Property.create({
+//             user: req.body.user,
+//             ownerName: req.body.ownerName,
+//             PropertyContractAddress: req.body.PropertyContractAddress,
+//             OwnerWalletAddress: req.body.OwnerWalletAddress,
+//             propertyAddress: req.body.propertyAddress,
+//             propertyPrice: req.body.propertyPrice,
+//             // propertyImages: arrPropertyImages,
+//             // propertyDocuments: arrPropertyDocuments,
+//             beds: req.body.beds,
+//             baths: req.body.baths,
+//             size: req.body.size,
+//             country: req.body.country,
+//             city: req.body.city,
+//             postalcode: req.body.postalcode,
+//             numberOfSupplies: req.body.numberOfSupplies,
+//             isRentable : req.body.isRentable
+
+
+//         })
+//         console.log(addProperty)
+//         res.json({ addProperty })
+//     } catch (error) {
+//         console.error(error.message)
+//         res.status(500).send("internal server error")
+//     }
+// })
+
 // fetch all properties of specific user by userid 
 // route = get-property-by-user/:id
 router.get("/get-property-by-user/:id", async (req, res) => {
