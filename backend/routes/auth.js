@@ -73,6 +73,7 @@ router.post('/login', async (req, res) => {
             }
         }
         const authToken = jwt.sign(data, JWT_SECRET)
+        console.log(authToken)
         res.json({
             firstName: user.firstName,
             lastName:user.lastName,
@@ -81,6 +82,7 @@ router.post('/login', async (req, res) => {
             image:user.image,
             authToken
         })
+        
     } catch (error) { 
         console.error(error.message)
         res.status(500).send("internal server error")

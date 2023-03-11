@@ -34,7 +34,6 @@ export const addProperty = (formData,Pricepertoken,CloneOwner,numberOfSupplies,n
     dispatch({
       type: ADD_PROPERTY_REQUEST
     })
-
     const config = {
       headers: {
         'Content-Type': 'multipart/form-data',
@@ -42,9 +41,9 @@ export const addProperty = (formData,Pricepertoken,CloneOwner,numberOfSupplies,n
       }
     }
     
+    console.log("______________________________________________",token)
    
-    const  {data}  = await axios.post('http://localhost:8000/api/property/check', formData ,
-    config)
+    const  {data}  = await axios.post('http://localhost:8000/api/property/check', formData , config)
         
     const propertyId = data.addProperty._id
 
