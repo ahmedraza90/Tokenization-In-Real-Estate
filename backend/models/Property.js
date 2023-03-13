@@ -19,7 +19,6 @@ const PropertyDetailsSchema = new Schema({
     },
     OwnerWalletAddress: {
         type: String,
-        unique: true
     },
     propertyAddress: {
         type: String,
@@ -29,14 +28,14 @@ const PropertyDetailsSchema = new Schema({
         type: String,
         required: true
     },
-    // propertyImages:{
-    //     type:Array,
-    //     required:true
-    // },
-    // propertyDocuments:{
-    //     type:Array,
-    //     required:true,
-    // },
+    propertyImages:{
+        type:Array,
+        required:true
+    },
+    propertyDocuments:{
+        type:Array,
+        required:true,
+    },
     isRented:{
         type:Boolean,
         default:false,
@@ -81,6 +80,11 @@ const PropertyDetailsSchema = new Schema({
         type: String,
         required: true
     },
+    Installment : {
+        type: String,
+        enum: ['accpeted', 'open', 'noInstallement'],
+        default : 'noInstallement'
+    }
 },{TokenId: false })
 
 PropertyDetailsSchema.plugin(AutoIncrement,{inc_field: 'TokenId'});

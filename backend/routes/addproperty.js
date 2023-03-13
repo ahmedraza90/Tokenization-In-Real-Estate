@@ -8,7 +8,8 @@ const { validationResult } = require('express-validator');
 const fetchuser = require('../middleware/fetchuser');
 const router = express.Router()
 const multer = require('multer')
-const Rent = require('../models/Rent')
+const Rent = require('../models/Rent');
+const { application } = require('express');
 
 
 
@@ -47,14 +48,14 @@ router.post("/checkToken", fetchuser, async (req, res) => {
             TotalSupplies: req.body.TotalSupplies,
             PricePerToken: req.body.PricePerToken,
         })
-        await Buyer.findByIdAndUpdate(req.body.BuyerId, {quantity : req.body.RemainingTokens});
+        await Buyer.findByIdAndUpdate(req.body.BuyerId, { quantity: req.body.RemainingTokens });
         res.json({ listing })
     } catch (error) {
         console.log(error)
     }
 
 })
-router.get("/P",(req,res)=>{
+router.get("/P", (req, res) => {
     res.json("server start")
 })
 
@@ -64,36 +65,58 @@ router.patch("/bid/:id", async (req, res) => {
     try {
         const id = req.params.id;
         const properties = await Auction.findOne({ propertyId: id })
-        if(!properties){
-            return res.json("this property  isn't on auction")
+        if (!properties) {
+            return res.json({
+                status : "fail",
+                message : "this property  isn't on auction"
+            })
+        } else if(properties.IsEnded){
+            return res.json({
+                status : "fail",
+                message : "this auction has ended"
+            })
         }
 
-        let array = properties.users 
-        if(array.find(obj => obj.userId === req.body.userId)){
-            return res.json("you have already bid")
-        }
-        const updates = {
-                    userId: req.body.user,
-                    bidAmount: req.body.amount,
+        let array = properties.users
+        var t;
+        array.find(obj => {
+            if (obj.userId === req.body.userId) {
+                if (obj.bidAmount >= req.body.bidAmount) {
+                    t = "no"
+
+
+                } else {
+                    obj.bidAmount = req.body.bidAmount
+                    t = "yes"
                 }
-        const options = { new: true, select: {users: { _id: 0 }} };
+            }
+        })
+        if (t == "no") {
+            return res.json({
+                status: "fail",
+                message: "your previous Bid is greater. You can not bid"
+            })
+        } else if (t == "yes") {
+            return res.json({
+                status: "success",
+                message: "you have successfuly replace your old bid with new one"
+            })
+        } else {
+            const options = { new: true, select: { users: { _id: 0 } } };
 
-        const result = await Auction.findOneAndUpdate({propertyId:id}, { $push :{users: { $each: [req.body], $sort: { bidAmount: 1 } } }}, options);
+            const result = await Auction.findOneAndUpdate({ propertyId: id }, { $push: { users: { $each: [req.body], $sort: { bidAmount: -1 } } } }, options);
 
-        res.send(result)
+            res.send({
+                status: "success",
+                result
+            })
+        }
+
     } catch (error) {
         console.log(error.message)
     }
 })
 
-
-
-
-
-//api to get complete information including(bids,higest bids, auction, tenant) specific property using  proeprtyId
-router.get("/getProperty/:id", fetchuser, async (req, res) => {
-
-})
 
 router.patch("/update/:id", async (req, res) => {
     try {
@@ -226,11 +249,18 @@ router.post('/check', fetchuser, Arrayupload, async (req, res) => {
 // add property using route '/api/property/check' Auth required
 // route: /addProperty
 // router.post('/addProperty', async (req, res) => {
-//     console.log("_________________-",req.body)
+//     console.log("_________________-", req.body)
 //     // if there are errors return bad request and errors
 //     const errors = validationResult(req);
 //     if (!errors.isEmpty()) {
 //         return res.status(400).json({ errors: errors.array() });
+//     }
+//     const prop = await Property.findOne({ propertyAddress: req.body.propertyAddress })
+//     if (prop) {
+//         return res.status(400).json({
+//             status: "error",
+//             message: "property with this address already exist"
+//         });
 //     }
 //     try {
 //         // const arrPropertyImages = []
@@ -257,7 +287,7 @@ router.post('/check', fetchuser, Arrayupload, async (req, res) => {
 //             city: req.body.city,
 //             postalcode: req.body.postalcode,
 //             numberOfSupplies: req.body.numberOfSupplies,
-//             isRentable : req.body.isRentable
+//             isRentable: req.body.isRentable
 
 
 //         })
@@ -275,16 +305,16 @@ router.get("/get-property-by-user/:id", async (req, res) => {
     try {
         console.log(req.params.id)
         const listing = await Property.find({ user: req.params.id }).lean();
-        
+
         const final = await Promise.all(listing.map(async (property) => {
             if (property.inAuction) {
                 const auction = await Auction.findOne({ propertyId: property._id });
                 property.auction = auction;
-            } else if (property.isRented){
+            } else if (property.isRented) {
                 const tenant = await Rent.findOne({ propertyId: property._id }).populate('tenant');
                 property.tenant = tenant;
             }
-        return property;
+            return property;
         }));
         return res.json(final)
     } catch (e) {
@@ -302,7 +332,7 @@ router.get("/get-property/:id", async (req, res) => {
         if (listing.inAuction) {
             const auction = await Auction.findOne({ propertyId: listing._id });
             listing.auction = auction;
-        } else if (property.isRented){
+        } else if (property.isRented) {
             const tenant = await Rent.findOne({ propertyId: listing._id }).populate('tenant');
             listing.tenant = tenant;
         }
@@ -323,35 +353,36 @@ router.post("/startAuction/:id", async (req, res) => {
         //crdeating auction 
         const properties = await Property.findOne({ _id: id })
         console.log(properties)
-        
+
         //isrented should be false here.....
         //inAuction should be false here.... 
-        if(properties.isRented || properties.inAuction){
+        if (properties.isRented || properties.inAuction) {
             return res.json("sorry it is already in auction")
         }
         const auction = await Auction.findOne({ propertyId: id })
-        if(auction){
+        if (auction) {
             return res.json("sorry it is already in auction")
         }
         console.log(properties)
-         
+
         await Auction.create({
             propertyId: id,
-            users : [], 
-            startDate : req.body.startDate, //2002-12-09'
-            endDate : req.body.endDate
+            users: [],
+            startDate: req.body.startDate, //2002-12-09
+            endDate: req.body.endDate
         })
 
         //updating property table   
         const updates = req.body;
         const options = { new: true };
 
-        const result = await Property.findByIdAndUpdate(id, {inAuction : true }, options);
+        const result = await Property.findByIdAndUpdate(id, { inAuction: true }, options);
 
         res.send("result")
     } catch (error) {
         console.log(error.message)
     }
 })
+
 
 module.exports = router
