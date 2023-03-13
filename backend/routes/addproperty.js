@@ -235,7 +235,8 @@ router.post('/check', fetchuser, Arrayupload, async (req, res) => {
             city: req.body.city,
             postalcode: req.body.postalcode,
             numberOfSupplies: req.body.numberOfSupplies,
-            isRentable : req.body.isRentable
+            isRentable : req.body.isRentable,
+            Installment : req.body.Installment
 
 
         })
