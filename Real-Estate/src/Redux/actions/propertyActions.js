@@ -18,7 +18,11 @@ import {
   MAKE_BID_REQUEST,
   MAKE_BID_SUCCESS,
   MAKE_BID_FAIL,
-  GET_ALL_PROPERTIES_OF_SPECIFIC_USER_REQUEST
+  GET_ALL_PROPERTIES_OF_SPECIFIC_USER_REQUEST,
+  GET_ALL_PROPERTIES_OF_SPECIFIC_USER_SUCCESS,
+  GET_SPECIFIC_PROPERTY_FAIL,
+  GET_SPECIFIC_PROPERTY_REQUEST,
+  GET_SPECIFIC_PROPERTY_SUCCESS
 } from '../constants/propertyConstants'
 
 
@@ -168,7 +172,63 @@ export const SearchProperties = (key) => async (dispatch) => {
     // console.error("hello world")
   }
 }
+export const getSpecificProperty = () => async (dispatch) => {
+  try {
+    dispatch({
+      type: GET_SPECIFIC_PROPERTY_REQUEST
+    })
+    const newconfig = {
+      headers: {
+        'Content-Type': 'application/json',
+        "auth-token": token
+      }
+    }
 
+    let propertyId = "640ef04d494ef81f8b6d7484"
+
+    const { data } = await axios.get(`http://localhost:8000/get-property/${propertyId}`, newconfig)
+
+    dispatch({
+      type: GET_SPECIFIC_PROPERTY_SUCCESS,
+      payload: data
+
+    })
+  } catch (error) {
+    dispatch({
+      type: GET_SPECIFIC_PROPERTY_FAIL,
+      payload: error.response.data
+    })
+  }
+}
+
+export const getAllPropertiesOfSpecificUser = () => async (dispatch) => {
+  try {
+    dispatch({
+      type: GET_ALL_PROPERTIES_OF_SPECIFIC_USER_REQUEST
+    })
+    const newconfig = {
+      headers: {
+        'Content-Type': 'application/json',
+        "auth-token": token
+      }
+    }
+
+    let userId = "640ef04d494ef81f8b6d7484"
+
+    const { data } = await axios.get(`http://localhost:8000/get-property-by-user/${userId}`, newconfig)
+
+    dispatch({
+      type: GET_ALL_PROPERTIES_OF_SPECIFIC_USER_SUCCESS,
+      payload: data
+
+    })
+  } catch (error) {
+    dispatch({
+      type: GET_SPECIFIC_PROPERTY_FAIL,
+      payload: error.response.data
+    })
+  }
+}
 export const startAuction = () => async (dispatch) => {
   try {
     dispatch({
@@ -233,60 +293,3 @@ export const makeBid = () => async (dispatch) => {
   }
 }
 
-export const getSpecificProperty = () => async (dispatch) => {
-  try {
-    dispatch({
-      type: GET_SPECIFIC_PROPERTY_REQUEST
-    })
-    const newconfig = {
-      headers: {
-        'Content-Type': 'application/json',
-        "auth-token": token
-      }
-    }
-
-    let propertyId = "640ef04d494ef81f8b6d7484"
-
-    const { data } = await axios.get(`http://localhost:8000/get-property/${propertyId}`, newconfig)
-
-    dispatch({
-      type: GET_SPECIFIC_PROPERTY_SUCCESS,
-      payload: data
-
-    })
-  } catch (error) {
-    dispatch({
-      type: GET_SPECIFIC_PROPERTY_FAIL,
-      payload: error.response.data
-    })
-  }
-}
-
-export const getAllPropertiesOfSpecificUser = () => async (dispatch) => {
-  try {
-    dispatch({
-      type: GET_ALL_PROPERTIES_OF_SPECIFIC_USER_REQUEST
-    })
-    const newconfig = {
-      headers: {
-        'Content-Type': 'application/json',
-        "auth-token": token
-      }
-    }
-
-    let userId = "640ef04d494ef81f8b6d7484"
-
-    const { data } = await axios.get(`http://localhost:8000/get-property-by-user/${userId}`, newconfig)
-
-    dispatch({
-      type: GET_ALL_PROPERTIES_OF_SPECIFIC_USER_SUCCESS,
-      payload: data
-
-    })
-  } catch (error) {
-    dispatch({
-      type: GET_SPECIFIC_PROPERTY_FAIL,
-      payload: error.response.data
-    })
-  }
-}
