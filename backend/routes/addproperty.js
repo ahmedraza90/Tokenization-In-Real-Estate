@@ -40,13 +40,13 @@ router.get("/allproperties", async (req, res) => {
 router.post("/checkToken", fetchuser, async (req, res) => {
 
     try {
-        console.log(req.body);
         listing = await ListingTokens.create({
             user: mongoose.Types.ObjectId(req.body.user),
             propertyId: mongoose.Types.ObjectId(req.body.propertyId),
             SellerWalletAddress: req.body.SellerWalletAddress,
-            TotalSupplies: req.body.TotalSupplies,
-            PricePerToken: req.body.PricePerToken,
+            TotalSupplies: req.body.numberOfSupplies,
+            PricePerToken: req.body.Pricepertoken,
+            NumberOfTokenPerWallet: req.body.numberOfTokenPerWallet
         })
         await Buyer.findByIdAndUpdate(req.body.BuyerId, { quantity: req.body.RemainingTokens });
         res.json({ listing })
@@ -210,6 +210,13 @@ router.post('/check', fetchuser, Arrayupload, async (req, res) => {
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
     }
+    const prop = await Property.findOne({ propertyAddress: req.body.propertyAddress })
+    if (prop) {
+        return res.status(400).json({
+            status: "error",
+            message: "property with this address already exist"
+        });
+    }
     try {
         const arrPropertyImages = []
         for (let i = 0; i < req.files.propertyImages.length; i++) {
@@ -326,7 +333,7 @@ router.get("/get-property-by-user/:id", async (req, res) => {
 
 // fetch specifc properties by propertyId 
 // route = get-property/:id
-router.get("/get-property/:id", async (req, res) => {
+router.get("/get-property/:id", fetchuser, async (req, res) => {
     try {
         console.log(req.params.id)
         const listing = await Property.findOne({ _id: req.params.id }).lean();
@@ -347,7 +354,7 @@ router.get("/get-property/:id", async (req, res) => {
 
 //api to start the auction by updating auction table and property table by using propertyId
 // route: /startAuction/:id
-router.post("/startAuction/:id", async (req, res) => {
+router.post("/startAuction/:id", fetchuser, async (req, res) => {
     try {
 
         const id = req.params.id;
@@ -379,7 +386,7 @@ router.post("/startAuction/:id", async (req, res) => {
 
         const result = await Property.findByIdAndUpdate(id, { inAuction: true }, options);
 
-        res.send("result")
+        res.send(result)
     } catch (error) {
         console.log(error.message)
     }

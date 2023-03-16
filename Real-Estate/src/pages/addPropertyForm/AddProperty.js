@@ -132,7 +132,7 @@ function AddProperty() {
       formData.append("propertyDocuments", arr1[i]);
     }
     formData.append("ownerName", ownerName);
-    // formData.append("PropertyContractAddress", CloneAddress);
+    formData.append("PropertyContractAddress", "CloneAddress");
     formData.append("OwnerWalletAddress", accounts[0]);
     formData.append("numberOfSupplies", numberOfSupplies);
     formData.append("propertyAddress", propertyAddress);
@@ -143,6 +143,8 @@ function AddProperty() {
     formData.append("size", size);
     formData.append("city", city);
     formData.append("postalcode", postalcode);
+    formData.append("isRentable", false);
+    formData.append("Installment", 'noInstallement');
     let pricePerToken = (propertyPrice / ETHpriceToUSD).toString();
     setPricepertoken(pricePerToken);
     dispatch(

@@ -8,7 +8,10 @@ const cron = require('node-cron');
 const Auction = require('./models/Auction')
 const Property = require('./models/Property')
 const PropertyRoutes = require("./routes/addproperty")
+const swagger = require("./swagger")
+const swaggerUi = require('swagger-ui-express');
 connectToMongo();
+
 
 const app = express()
 const PORT = process.env.PORT
@@ -25,6 +28,7 @@ app.use((req, res, next) => {
     next()
 })
 
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swagger));
 app.use('/api/auth', require('./routes/auth'))
 app.use(PropertyRoutes)
 app.use('/api/upload', require('./routes/uploadRoutes'))
