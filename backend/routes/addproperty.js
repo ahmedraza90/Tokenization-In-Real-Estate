@@ -333,10 +333,10 @@ router.get("/get-property-by-user/:id", async (req, res) => {
 
 // fetch specifc properties by propertyId 
 // route = get-property/:id
-router.get("/get-property/:id", fetchuser, async (req, res) => {
+router.get("/get-property/:id", async (req, res) => {
     try {
         console.log(req.params.id)
-        const listing = await Property.findOne({ _id: req.params.id }).lean();
+        const listing = await Property.findById(mongoose.Types.ObjectId(req.params.id)).lean();
         if (listing.inAuction) {
             const auction = await Auction.findOne({ propertyId: listing._id });
             listing.auction = auction;
