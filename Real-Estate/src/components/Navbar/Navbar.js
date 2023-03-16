@@ -43,12 +43,11 @@ const Navbar = () => {
       dispatch(SearchProperties(key))
       navigate('/search')
     }
-  }
-  console.log(address)
+  } 
 
   return (
     <div>
-      <input type="checkbox" id="check" />
+      <input type="checkbox" id="check" style={{display:"none"}}/>
       <nav>
         <div className="icon">
           <NavLink to="/"><img src={Logo} alt="logo" /></NavLink>

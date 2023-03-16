@@ -206,10 +206,6 @@ router.get("/getBids/:id", async (req, res) => {
 router.post('/check', fetchuser, Arrayupload, async (req, res) => {
     console.log("_________________-",req.body)
     // if there are errors return bad request and errors
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
-    }
     const prop = await Property.findOne({ propertyAddress: req.body.propertyAddress })
     if (prop) {
         return res.status(400).json({

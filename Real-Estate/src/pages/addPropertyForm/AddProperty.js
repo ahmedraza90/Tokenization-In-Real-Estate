@@ -23,6 +23,10 @@ function AddProperty() {
   const propertyAdd = useSelector((state) => state.propertyAdd);
   const { loading, error } = propertyAdd;
 
+  if(error){
+
+    console.log(error.message)
+  }
   useEffect(() => {
     if (!userInfo) {
       navigate("/login");
@@ -43,57 +47,10 @@ function AddProperty() {
   const [city, setCity] = useState("");
   const [postalcode, setPostalCode] = useState("");
   const [ETHpriceToUSD, setETHpriceToUSD] = useState(0);
-  const [message, setMessage] = useState("");
   const [uploading, setUploading] = useState(false);
-  // const [CloneAddress, setCloneAddress] = useState(null);
-  // const [CloneOwner, setCloneOwner] = useState(null);
   const [Pricepertoken, setPricepertoken] = useState(null);
   const [successfull, setSuccessfull] = useState(false);
-  
-  // const Clone = async (
-  //   _propertyAddress,
-  //   _ownerName,
-  //   _totalSupply,
-  //   _tokensPerWallet
-  // ) => {
-  //   try {
-      // setUploading(true);
-  //     let pricePerToken = (propertyPrice / ETHpriceToUSD).toString();
-  //     setPricepertoken(pricePerToken);
-  //     pricePerToken = ethers.utils.parseEther(pricePerToken, 18);
-  //     console.log(pricePerToken);
-      // const accounts = await window.ethereum.request({
-      //   method: "eth_requestAccounts",
-      // });
-      // const address = accounts[0];
-      // setCloneOwner(accounts[0]);
-      // let provider = new ethers.providers.Web3Provider(window.ethereum);
-      // let signer = provider.getSigner();
-  //     const erc721Factory = new ethers.Contract(
-  //       ERC72FACTORYContractAddress,
-  //       ERC72FACTORYABI,
-  //       signer
-  //     );
-  //     const txResponse = await erc721Factory.cloneContract(
-  //       _propertyAddress,
-  //       _ownerName,
-  //       _totalSupply,
-  //       pricePerToken,
-  //       _tokensPerWallet,
-  //       { gasLimit: 5000000 }
-
-  //     );
-  //     console.log(txResponse)
-  //     erc721Factory.on("CloneCreatedAt", (from, cloneAdd) => {
-  //       setCloneAddress((prevAdd) => (prevAdd = cloneAdd));
-  //       setCloneOwner((prevAdd) => (prevAdd = from));
-  //     });
-
-  //   } catch (error) {
-  //     setMessage(error);
-  //     console.log(error.message);
-  //   }
-  // };
+  const [isRentable,setIsRentable] = useState(false);
   
   const getEth = async () => {
     const { data } = await axios.get(
@@ -143,71 +100,22 @@ function AddProperty() {
     formData.append("size", size);
     formData.append("city", city);
     formData.append("postalcode", postalcode);
-    formData.append("isRentable", false);
+    formData.append("isRentable", isRentable);
     formData.append("Installment", 'noInstallement');
     let pricePerToken = (propertyPrice / ETHpriceToUSD).toString();
     setPricepertoken(pricePerToken);
     dispatch(
           addProperty(
             formData,
-            Pricepertoken,
+            pricePerToken,
             accounts[0],
             numberOfSupplies,
             numberOfTokenPerWallet
           )
     );
     setUploading(false);
-  //   if (CloneAddress !== null && CloneOwner !== null) {
-  //     if (
-  //       ownerName &&
-  //       numberOfSupplies &&
-  //       propertyAddress &&
-  //       propertyPrice &&
-  //       propertyImages &&
-  //       numberOfTokenPerWallet &&
-  //       propertyDocuments &&
-  //       beds &&
-  //       baths &&
-  //       size &&
-  //       country &&
-  //       city &&
-  //       postalcode &&
-  //       ETHpriceToUSD &&
-  //       CloneAddress &&
-  //       CloneOwner &&
-  //       Pricepertoken
-  //     ) {
-        // dispatch(
-        //   addProperty(
-        //     formData,
-        //     Pricepertoken,
-        //     CloneOwner,
-        //     numberOfSupplies,
-        //     numberOfTokenPerWallet
-        //   )
-        // );
-  //       setOwnerName(null);
-  //       setNumberOfSupplies(null);
-  //       setPropertyAddress(null);
-  //       setPropertyPrice(null);
-  //       setPropertyImages(null);
-  //       setNumberOfTokenPerWallet(null);
-  //       setPropertyDocuments(null);
-  //       setBeds(null);
-  //       setBaths(null);
-  //       setSize(null);
-  //       setCountry(null);
-  //       setCity(null);
-  //       setPostalCode(null);
-  //       setETHpriceToUSD(null);
-  //       setCloneAddress(null);
-  //       setCloneOwner(null);
-  //       setPricepertoken(null);
-  //     }
+    setSuccessfull(true)
 
-  //     setUploading(false);
-  //     setSuccessfull(true);
-  //   }
   };
   
   return (
@@ -217,7 +125,7 @@ function AddProperty() {
       <div>
         {successfull && <SuccessModal />}
         {uploading && <Spinner />}
-        {error && <div className="error">{message}</div>}
+        {error && <div className="error">{error.message}</div>}
 
 
         <form className="property-form"  encType="multipart/form-data" style={{width:"100vw"}}>
@@ -229,7 +137,6 @@ function AddProperty() {
           
           <div className="form-inputs" style={{display:"flex",width:"100%",justifyContent: "space-evenly"}}>
           <div className="form-styles">
-            <label style={{ color: "lightgray", float: "left", marginBottom:"-21px",marginTop:"16px"}}>Enter Owner Name</label>
           <input
             type="text"
             name="ownerName"
@@ -239,7 +146,6 @@ function AddProperty() {
             onChange={(e) => setOwnerName(e.target.value)}
             placeholder="Enter Owner Name"
           />
-          <label  className="labels"> Enter Supplies</label>
           <input
             type="Number"
             name="numberOfSupplies"
@@ -249,7 +155,6 @@ function AddProperty() {
             onChange={(e) => setNumberOfSupplies(e.target.value)}
             placeholder="Enter Supplies"
           />
-          <label  className="labels"> Enter property address</label>
           <input
             type="text"
             name="propertyAddress"
@@ -260,7 +165,6 @@ function AddProperty() {
             placeholder="Enter property address"
           />
 
-          <label className="labels"> Enter property Price</label>
           <input
             type="Number"
             name="propertyPrice"
@@ -270,8 +174,6 @@ function AddProperty() {
             onChange={(e) => setPropertyPrice(e.target.value)}
             placeholder="Enter property Price"
           />
-
-          <label className="labels" > Enter Number of token per wallet</label>
           <input
             type="Number"
             name="NumberOfTokenPerWallet"
@@ -281,7 +183,6 @@ function AddProperty() {
             onChange={(e) => setNumberOfTokenPerWallet(e.target.value)}
             placeholder="Enter Number of token per wallet"
           />
-
           <label className="labels"> Select property images</label>
           <input
             type="file"
@@ -300,10 +201,9 @@ function AddProperty() {
             multiple
             onChange={(e) => setPropertyDocuments(e.target.files)}
           />
-</div>
+          </div>
           <div className="form-styles">
-        
-           <label className="labels"> Enter no of beds</label>
+          <label htmlFor="rentable" style={{color:"white"}}>Is Rentable<input type="checkbox" onChange={(e)=> setIsRentable(!isRentable)}/></label>
           <input
             type="number"
             name="beds"
@@ -311,9 +211,8 @@ function AddProperty() {
             className="inputs"
             required
             onChange={(e) => setBeds(e.target.value)}
-            placeholder="Enter no of beds"
+            placeholder="Enter no of bed rooms"
           />
-           <label className="labels"> Enter no of baths</label>
           <input
             type="number"
             name="baths"
@@ -321,10 +220,9 @@ function AddProperty() {
             className="inputs"
             required
             onChange={(e) => setBaths(e.target.value)}
-            placeholder="Enter no of baths"
+            placeholder="Enter no of bath rooms"
           />
 
-           <label className="labels"> Enter area in sqft</label>
           <input
             type="Number"
             name="size"
@@ -335,7 +233,6 @@ function AddProperty() {
             onChange={(e) => setSize(e.target.value)}
           />
 
-           <label className="labels"> Enter country</label>
           <input
             type="text"
             name="country"
@@ -346,7 +243,6 @@ function AddProperty() {
             onChange={(e) => setCountry(e.target.value)}
           />
 
-           <label className="labels"> Enter city</label>
           <input
             type="text"
             name="city"
@@ -356,7 +252,6 @@ function AddProperty() {
             required
             onChange={(e) => setCity(e.target.value)}
           />
-           <label className="labels"> Enter postal code</label>
           <input
             type="text"
             name="postalcode"
