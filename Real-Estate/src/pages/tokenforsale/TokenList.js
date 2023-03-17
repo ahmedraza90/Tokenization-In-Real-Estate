@@ -6,6 +6,8 @@ import Modal from '../../components/buyTokensModal/TokenModal'
 
 export default function TokenList({tokens}) {
   const [modalOpen, setModalOpen] = useState(false);
+
+  console.log(tokens)
  
   return (
     <>

@@ -15,11 +15,11 @@ function Financials() {
         <div className="financial-details">
           <h2>
             <h5>Property price</h5>
-            <span className='gapleft'>$ {property.propertyPrice}</span>
+            <span className='gapleft'>$ {property.listing.propertyPrice}</span>
           </h2>
           <h2>
             <h5>Total tokens/shares</h5>
-            <span className='gapleft'>{property.numberOfSupplies}</span>
+            <span className='gapleft'>{property.listing.numberOfSupplies}</span>
           </h2>
           <h2>
             <h5>Rent per Token</h5>
@@ -27,7 +27,7 @@ function Financials() {
           </h2>
           <h2>
             <h5>Token Price</h5>
-            <span className='gapleft'>$ {property.PricePerToken}</span>
+            <span className='gapleft'>$ {property.listing.TokenForSale.PricePerToken}</span>
           </h2>
           <h2 style={{border:"none"}}>
             <h5>Net Rent/year</h5>

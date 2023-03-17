@@ -42,22 +42,22 @@ app.get("/", (req, res) => {
 })
 
 // Schedule a task to run every minute to check for ended auctions  
-cron.schedule('* * * * *', async () => {
-    const now = new Date();
-    const result = await Auction.find({IsEnded: false});
-    console.log(result)
-    if(result.length > 0){
-        const filter = { endTime: { $lt: now } };
-        const update = { IsEnded: true };
-        await Auction.updateMany(filter, update);
-        await Promise.all(result.map(async (auction)=>{ 
-                console.log((auction.propertyId).toString())
-                const _id = `${(auction.propertyId).toString()}`
-                await Property.findByIdAndUpdate(_id, { inAuction: false });
-        })
-        )
-    }
-});
+// cron.schedule('* * * * *', async () => {
+//     const now = new Date();
+//     const result = await Auction.find({IsEnded: false});
+//     console.log(result)
+//     if(result.length > 0){
+//         const filter = { endTime: { $lt: now } };
+//         const update = { IsEnded: true };
+//         await Auction.updateMany(filter, update);
+//         await Promise.all(result.map(async (auction)=>{ 
+//                 console.log((auction.propertyId).toString())
+//                 const _id = `${(auction.propertyId).toString()}`
+//                 await Property.findByIdAndUpdate(_id, { inAuction: false });
+//         })
+//         )
+//     }
+// });
 
 
 

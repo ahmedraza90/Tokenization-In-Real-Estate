@@ -3,7 +3,7 @@ const { Schema } = mongoose
 const auction = new Schema({
     propertyId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'user',
+        ref: 'user', 
         unique: true // make the propertyId field unique
     },
     users : [

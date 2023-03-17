@@ -36,11 +36,14 @@ function PropertyDetails() {
 
     const propertyDetails = useSelector(state => state.propertyDetails)
     const { loading, error, property } = propertyDetails
-    console.log(property)
+    if(property){
+
+        console.log(property)
+    }
 return (
         <>
             <Navbar />
-            {property && <Slider propertyImages={property.propertyImages} />}
+            {/* {property && <Slider propertyImages={property.listing.propertyImages} />} */}
             {property && openModal && <MintModel setOpenModal={setOpenModal} property={property} />}
             {property && openRentModal && <RentableForm setOpenRentModal={setOpenRentModal} property={property} />}
 
@@ -52,7 +55,7 @@ return (
                 setOpenRentModal(true);
             }}>Rent Your Property</p>
 
-            <CenterNavbar id={id} />
+           {id && <CenterNavbar id={id} />}
             <Footer />
         </>
     )

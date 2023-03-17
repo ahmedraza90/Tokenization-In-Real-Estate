@@ -4,6 +4,7 @@ const Buyer  = require('../models/Buyer')
 const ListingTokens  = require('../models/ListingTokens')
 const fetchuser = require('../middleware/fetchuser');
 const router = express.Router()
+const Property =require('../models/Property');
 
 
 router.post("/buyerData",fetchuser,async (req,res)=>{
@@ -65,11 +66,16 @@ router.get("/userTokens", fetchuser, async(req,res)=>{
         res.status(500).send("Internal Server Error");
     }
 })
-router.get("/ListingTokens/:id",  async(req,res)=>{
+router.get("/ListingTokens/:id",  async(req,res)=>{ 
     try {
         
         console.log(req.params.id);
-        const use = await ListingTokens.find({ user: req.params.id}).populate('propertyId')
+        const use = await ListingTokens.find({ user: req.params.id}).lean()
+        const data =await Promise.all(use.map(async(obj)=>{
+            const property = await Property.findById({_id:obj.propertyId})
+            obj["property"] = property
+            return obj
+        }))
         res.json(use)
     } catch (error) {
         console.error(error.message);

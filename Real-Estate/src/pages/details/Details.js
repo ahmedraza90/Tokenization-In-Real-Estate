@@ -8,7 +8,8 @@ function Details() {
 
   const propertyDetails = useSelector(state => state.propertyDetails)
   const { loading, error, property } = propertyDetails
-  console.log("***************",property)
+
+  console.log(property)
 
   return (
     <>
@@ -20,55 +21,52 @@ function Details() {
         <div className="property-details">
           <h2>
             <h5> Owner name</h5>
-            <span className='gapleft'>{property.ownerName}</span>
+            <span className='gapleft'>{property.listing.ownerName}</span>
           </h2>
-          <h2>
-            <h5> Property Contract Address</h5>
-            <span className='gapleft'>{property.PropertyContractAddress}</span>
-          </h2>
+
           <h2>
             <h5> Property Contract Owner </h5>
-            <span className='gapleft'>{property.OwnerWalletAddress}</span>
+            <span className='gapleft'>{property.listing.OwnerWalletAddress}</span>
           </h2>
           <h2>
             <h5>Area</h5>
             <span className='gapleft'>  
-            {property.size} sqft</span>
+            {property.listing.size} sqft</span>
           </h2>
           <h2>
             <h5>Bedrooms</h5>
             <span className='gapleft'>  
-            {property.beds}
+            {property.listing.beds}
             </span>
           </h2>
           <h2>
             <h5>Bathrooms</h5>
             <span className='gapleft'> 
-            {property.baths} 
+            {property.listing.baths} 
             </span>
           </h2>
           <h2>
             <h5>Country</h5>
             <span className='gapleft'>   
-            {property.country}
+            {property.listing.country}
             </span>
           </h2>
           <h2>
             <h5>City</h5>
             <span className='gapleft'>
-              {property.city}
+              {property.listing.city}
               </span>
           </h2>
           <h2>
             <h5>Address</h5>
             <span className='gapleft'>
-              {property.propertyAddress}
+              {property.listing.propertyAddress}
               </span>
           </h2>
           <h2>
             <h5>Postal code</h5>
             <span className='gapleft'> 
-            {property.postalcode}
+            {property.listing.postalcode}
             </span>
           </h2>
           

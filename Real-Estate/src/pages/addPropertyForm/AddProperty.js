@@ -23,16 +23,9 @@ function AddProperty() {
   const propertyAdd = useSelector((state) => state.propertyAdd);
   const { loading, error } = propertyAdd;
 
-  if(error){
 
-    console.log(error.message)
-  }
-  useEffect(() => {
-    if (!userInfo) {
-      navigate("/login");
-    }
-  }, []);
 
+  
   const [ownerName, setOwnerName] = useState("");
   const [numberOfSupplies, setNumberOfSupplies] = useState(0);
   const [propertyAddress, setPropertyAddress] = useState("");
@@ -51,6 +44,14 @@ function AddProperty() {
   const [Pricepertoken, setPricepertoken] = useState(null);
   const [successfull, setSuccessfull] = useState(false);
   const [isRentable,setIsRentable] = useState(false);
+
+ 
+  useEffect(() => {
+    if (!userInfo) {
+      navigate("/login");
+    }
+  }, []);
+
   
   const getEth = async () => {
     const { data } = await axios.get(
@@ -114,7 +115,7 @@ function AddProperty() {
           )
     );
     setUploading(false);
-    setSuccessfull(true)
+   setSuccessfull(true)
 
   };
   

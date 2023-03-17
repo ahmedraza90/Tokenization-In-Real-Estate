@@ -3,8 +3,9 @@ import ResellModal from '../../components/resellModal/ResellModal'
 import { Link } from 'react-router-dom'
 
 function TokensCards({ tokens }) {
+
     const [resellModal, setResellModal] = useState(false)
-    console.log("*********************************************8",tokens.propertyId)
+    console.log("*********************************************8",tokens)
     return (
         <>
         
@@ -25,7 +26,7 @@ function TokensCards({ tokens }) {
                                 setResellModal(true);
                             }}>Resell</button>
 
-                        <Link to={`/propertydetails/${tokens?.propertyId._id}`} id="link">View</Link>
+                        <Link to={`/propertydetails/${tokens?._id}`} id="link">View</Link>
                     </div>
                     {resellModal && <ResellModal setResell={setResellModal} property={tokens} />}
                 </div>

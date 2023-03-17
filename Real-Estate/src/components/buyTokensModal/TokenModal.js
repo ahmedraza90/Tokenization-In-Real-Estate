@@ -7,7 +7,7 @@ import SuccessPurchase from '../success purchase/SuccessPurchase';
 
 
 export default function TokenModal({setOpenModal, property}) {
-  console.log("____________________________________________",property)
+  console.log("____________________________________________",property.propertyId)
  const [show, setShow] = useState(false)
  const [count, setCount] = useState(0)
 
@@ -40,7 +40,7 @@ if(a){
 
       const buyerData = {
 
-        quantity: count, ListingTokensId: property._id, BuyerWalletAddress: address, propertyId:property.propertyId._id
+        quantity: count, ListingTokensId: property.propertyId, BuyerWalletAddress: address, propertyId:property.propertyId
       }
       console.log(buyerData)
 
@@ -70,7 +70,7 @@ if(a){
         }
       }
       console.log(property._id)
-      const { data1 } = await axios.post(`http://localhost:8000/api/property/propertyTokens/${property._id}`, updateListing, newconfig)
+      const { data1 } = await axios.post(`http://localhost:8000/propertyTokens/${property.propertyId}`, updateListing, newconfig)
 
 
 

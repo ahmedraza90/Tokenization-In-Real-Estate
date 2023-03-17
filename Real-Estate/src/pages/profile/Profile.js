@@ -28,6 +28,10 @@ function Profile() {
 
 
     var a = localStorage.getItem('userInfo')
+
+    var id = JSON.parse(a).id
+    console.log(id)
+    
     if (a) {
         var token = JSON.parse(a).authToken
     }
@@ -53,7 +57,7 @@ function Profile() {
             }
         }
         const { data } = await axios.get("http://localhost:8000/api/userTokens", config)
-        // console.log(data)
+        console.log("usertkn",data)
         setUserTokens(data)
     }
 
@@ -63,7 +67,7 @@ function Profile() {
                 "auth-token": token
             }
         }
-        const { data } = await axios.get(`http://localhost:8000/api/ListingTokens/${userInfo.id}`, config)
+        const { data } = await axios.get(`http://localhost:8000/api/ListingTokens/${id}`, config)
         console.log("Listings",data)
         setUserPropertyData(data)
     }
@@ -109,7 +113,7 @@ function Profile() {
             {showListing && userPropertyData && userPropertyData.length === 0 ? <p className='Notok'>No Listings ..... </p> : ""}
             <div>
                 <div className="main">
-                      {showListing &&  <h1 style={{color:"white"}}>Tokens Listed For Sale</h1>}
+                      {showListing && userPropertyData && userPropertyData.length > 0 && <h1 style={{color:"white"}}>Tokens Listed For Sale</h1>}
                     <ul className="cards">
                         {showListing && userPropertyData && [userPropertyData].map((property) => (
                             <ListingCard key={property._id} property={property} />

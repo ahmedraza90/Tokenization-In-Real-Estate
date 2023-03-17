@@ -100,7 +100,8 @@ export const getAllProperties = () => async (dispatch) => {
         'Content-Type': 'application/json'
       }
     }
-    const { data } = await axios.get("http://localhost:8000/api/property/allproperties", config)
+    const { data } = await axios.get("http://localhost:8000/allproperties", config)
+    console.log(data)
 
     dispatch({
       type: LIST_PROPERTY_SUCCESS,
@@ -121,7 +122,7 @@ export const listPropertyDetails = (id) => async (dispatch) => {
       type: PROPERTY_DETAILS_REQUEST
     })
 
-    const { data } = await axios.get(`http://localhost:8000/api/property/${id}`)
+    const { data } = await axios.get(`http://localhost:8000/get-property/${id}`)
 
     dispatch({
       type: PROPERTY_DETAILS_SUCCESS,
@@ -139,7 +140,7 @@ export const getTokenForSale = (propertyId) => async (dispatch) => {
       type: GET_PROPERTY_TOKENS_FOR_SALE
     })
 
-    const { data } = await axios.get(`http://localhost:8000/api/property/getTokenForSale/${propertyId}`)
+    const { data } = await axios.get(`http://localhost:8000/getTokenForSale/${propertyId}`)
     // console.log(data)
     dispatch({
       type: GET_PROPERTY_TOKENS_FOR_SALE_SUCCESS,
@@ -172,7 +173,63 @@ export const SearchProperties = (key) => async (dispatch) => {
     // console.error("hello world")
   }
 }
+export const getSpecificProperty = () => async (dispatch) => {
+  try {
+    dispatch({
+      type: GET_SPECIFIC_PROPERTY_REQUEST
+    })
+    const newconfig = {
+      headers: {
+        'Content-Type': 'application/json',
+        "auth-token": token
+      }
+    }
 
+    let propertyId = "640ef04d494ef81f8b6d7484"
+
+    const { data } = await axios.get(`http://localhost:8000/get-property/${propertyId}`, newconfig)
+
+    dispatch({
+      type: GET_SPECIFIC_PROPERTY_SUCCESS,
+      payload: data
+
+    })
+  } catch (error) {
+    dispatch({
+      type: GET_SPECIFIC_PROPERTY_FAIL,
+      payload: error.response.data
+    })
+  }
+}
+
+export const getAllPropertiesOfSpecificUser = () => async (dispatch) => {
+  try {
+    dispatch({
+      type: GET_ALL_PROPERTIES_OF_SPECIFIC_USER_REQUEST
+    })
+    const newconfig = {
+      headers: {
+        'Content-Type': 'application/json',
+        "auth-token": token
+      }
+    }
+
+    let userId = "640ef04d494ef81f8b6d7484"
+
+    const { data } = await axios.get(`http://localhost:8000/get-property-by-user/${userId}`, newconfig)
+
+    dispatch({
+      type: GET_ALL_PROPERTIES_OF_SPECIFIC_USER_SUCCESS,
+      payload: data
+
+    })
+  } catch (error) {
+    dispatch({
+      type: GET_SPECIFIC_PROPERTY_FAIL,
+      payload: error.response.data
+    })
+  }
+}
 export const startAuction = () => async (dispatch) => {
   try {
     dispatch({
@@ -237,60 +294,3 @@ export const makeBid = () => async (dispatch) => {
   }
 }
 
-export const getSpecificProperty = () => async (dispatch) => {
-  try {
-    dispatch({
-      type: GET_SPECIFIC_PROPERTY_REQUEST
-    })
-    const newconfig = {
-      headers: {
-        'Content-Type': 'application/json',
-        "auth-token": token
-      }
-    }
-
-    let propertyId = "640ef04d494ef81f8b6d7484"
-
-    const { data } = await axios.get(`http://localhost:8000/get-property/${propertyId}`, newconfig)
-
-    dispatch({
-      type: GET_SPECIFIC_PROPERTY_SUCCESS,
-      payload: data
-
-    })
-  } catch (error) {
-    dispatch({
-      type: GET_SPECIFIC_PROPERTY_FAIL,
-      payload: error.response.data
-    })
-  }
-}
-
-export const getAllPropertiesOfSpecificUser = () => async (dispatch) => {
-  try {
-    dispatch({
-      type: GET_ALL_PROPERTIES_OF_SPECIFIC_USER_REQUEST
-    })
-    const newconfig = {
-      headers: {
-        'Content-Type': 'application/json',
-        "auth-token": token
-      }
-    }
-
-    let userId = "640ef04d494ef81f8b6d7484"
-
-    const { data } = await axios.get(`http://localhost:8000/get-property-by-user/${userId}`, newconfig)
-
-    dispatch({
-      type: GET_ALL_PROPERTIES_OF_SPECIFIC_USER_SUCCESS,
-      payload: data
-
-    })
-  } catch (error) {
-    dispatch({
-      type: GET_SPECIFIC_PROPERTY_FAIL,
-      payload: error.response.data
-    })
-  }
-}

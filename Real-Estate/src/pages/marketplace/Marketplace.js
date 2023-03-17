@@ -22,7 +22,7 @@ const Marketplace = () => {
     const { loading, error, propertyData } = listAll
     if(propertyData){
 
-        console.log()
+        console.log(propertyData.properties)
     }
     return (
         <>
@@ -35,7 +35,7 @@ const Marketplace = () => {
             <div class="div3"> <img src={house1} alt="" width={"200px"} height={"200px"}/> </div> */}
             {/* </div> */}
             <h1 style={{color:"white", fontSize:"60px", marginTop:"30px"}}> Real Estate MarketPlace</h1>
-            {propertyData && propertyData.map((property) => (
+            {propertyData && propertyData.properties.map((property) => (
                 <Propertycard key={property._id} property={property} />
             )
             )}

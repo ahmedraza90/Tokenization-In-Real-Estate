@@ -31,7 +31,10 @@ const Arrayupload = upload.fields([{ name: "propertyImages", maxCount: 10 }, { n
 // fetch all properties GET /api/property/allproperties
 router.get("/allproperties", async (req, res) => {
     const properties = await Property.find({ property: req.body._id })
-    res.json(properties)
+    res.send({
+        status: "success",
+        properties
+    })
 })
 
 
@@ -41,7 +44,7 @@ router.post("/checkToken", fetchuser, async (req, res) => {
 
     try {
         listing = await ListingTokens.create({
-            user: mongoose.Types.ObjectId(req.body.user),
+            user: mongoose.Types.ObjectId(req.user.id),
             propertyId: mongoose.Types.ObjectId(req.body.propertyId),
             SellerWalletAddress: req.body.SellerWalletAddress,
             TotalSupplies: req.body.numberOfSupplies,
@@ -49,7 +52,10 @@ router.post("/checkToken", fetchuser, async (req, res) => {
             NumberOfTokenPerWallet: req.body.numberOfTokenPerWallet
         })
         await Buyer.findByIdAndUpdate(req.body.BuyerId, { quantity: req.body.RemainingTokens });
-        res.json({ listing })
+        res.send({
+            status: "success",
+            listing
+        })
     } catch (error) {
         console.log(error)
     }
@@ -125,8 +131,10 @@ router.patch("/update/:id", async (req, res) => {
         const options = { new: true };
 
         const result = await Property.findByIdAndUpdate(id, updates, options);
-
-        res.send(result)
+        return res.json({ 
+            status : "Success",
+            result
+        })
     } catch (error) {
         console.log(error.message)
     }
@@ -136,7 +144,10 @@ router.patch("/update/:id", async (req, res) => {
 router.get("/userproperties", fetchuser, async (req, res) => {
     try {
         const use = await Property.find({ user: req.user.id })
-        res.json(use)
+        return res.json({ 
+            status : "Success",
+            use
+        })
     } catch (error) {
         console.error(error.message);
         res.status(500).send("Internal Server Error");
@@ -149,8 +160,10 @@ router.get("/:id", async (req, res) => {
     try {
         console.log(req.params.id)
         const listing = await Property.findOne({ propertyId: req.params.id });
-        console.log(listing)
-        return res.json(listing)
+        return res.json({ 
+            status : "Success",
+            listing
+        })
     } catch (e) {
         return res.status(404).json('Product not found')
     }
@@ -160,13 +173,17 @@ router.get("/getTokenForSale/:propertyId", async (req, res) => {
         console.log(req.params.id)
         const listing = await ListingTokens.find({ propertyId: req.params.propertyId });
         console.log(listing)
-        return res.json(listing)
+        return res.json({ 
+            status : "Success",
+            listing
+        })
     } catch (e) {
         return res.status(404).json('Product not found')
     }
 })
 router.post("/propertyTokens/:id", async (req, res) => {
-    const listing = await ListingTokens.findOne({ _id: req.params.id });
+    const listing = await ListingTokens.findOne({ propertyId: req.params.id });
+    console.log(listing)
     var a = parseInt(listing.TotalSupplies)
     console.log("a====", a)
     console.log("req.body.TotalSupplies====", typeof req.body.TotalSupplies)
@@ -175,7 +192,10 @@ router.post("/propertyTokens/:id", async (req, res) => {
         req.body.TotalSupplies = a - req.body.TotalSupplies
         const options = { new: true };
         await ListingTokens.findByIdAndUpdate(req.params.id, { TotalSupplies: `${req.body.TotalSupplies}` }, options);
-        return res.json("successfully updated")
+        return res.json({ 
+            status : "Success",
+            message: "successfully updated"
+        })
     }
     else {
         await ListingTokens.findByIdAndRemove({ _id: id })
@@ -195,8 +215,10 @@ router.get("/getBids/:id", async (req, res) => {
         console.log("kkk")
         const id = req.params.id;
         const properties = await Auction.find({ "users.userId": req.params.id })
-        res.send(properties)
-
+        return res.json({ 
+            status : "Success",
+            properties
+        })
     } catch (error) {
         console.log(error.message)
     }
@@ -243,65 +265,16 @@ router.post('/check', fetchuser, Arrayupload, async (req, res) => {
 
 
         })
-        res.json({ addProperty })
+        res.json({ 
+            status : "Success",
+            addProperty
+        })
     } catch (error) {
         console.error(error.message)
         res.status(500).send("internal server error")
     }
 })
 
-// add property using route '/api/property/check' Auth required
-// route: /addProperty
-// router.post('/addProperty', async (req, res) => {
-//     console.log("_________________-", req.body)
-//     // if there are errors return bad request and errors
-//     const errors = validationResult(req);
-//     if (!errors.isEmpty()) {
-//         return res.status(400).json({ errors: errors.array() });
-//     }
-//     const prop = await Property.findOne({ propertyAddress: req.body.propertyAddress })
-//     if (prop) {
-//         return res.status(400).json({
-//             status: "error",
-//             message: "property with this address already exist"
-//         });
-//     }
-//     try {
-//         // const arrPropertyImages = []
-//         // for (let i = 0; i < req.files.propertyImages.length; i++) {
-//         //     arrPropertyImages.push(req.files.propertyImages[i].originalname)
-//         // }
-//         // const arrPropertyDocuments = []
-//         // for (let i = 0; i < req.files.propertyDocuments.length; i++) {
-//         //     arrPropertyDocuments.push(req.files.propertyDocuments[i].originalname)
-//         // }
-//         let addProperty = await Property.create({
-//             user: req.body.user,
-//             ownerName: req.body.ownerName,
-//             PropertyContractAddress: req.body.PropertyContractAddress,
-//             OwnerWalletAddress: req.body.OwnerWalletAddress,
-//             propertyAddress: req.body.propertyAddress,
-//             propertyPrice: req.body.propertyPrice,
-//             // propertyImages: arrPropertyImages,
-//             // propertyDocuments: arrPropertyDocuments,
-//             beds: req.body.beds,
-//             baths: req.body.baths,
-//             size: req.body.size,
-//             country: req.body.country,
-//             city: req.body.city,
-//             postalcode: req.body.postalcode,
-//             numberOfSupplies: req.body.numberOfSupplies,
-//             isRentable: req.body.isRentable
-
-
-//         })
-//         console.log(addProperty)
-//         res.json({ addProperty })
-//     } catch (error) {
-//         console.error(error.message)
-//         res.status(500).send("internal server error")
-//     }
-// })
 
 // fetch all properties of specific user by userid 
 // route = get-property-by-user/:id
@@ -309,8 +282,10 @@ router.get("/get-property-by-user/:id", async (req, res) => {
     try {
         console.log(req.params.id)
         const listing = await Property.find({ user: req.params.id }).lean();
-
-        const final = await Promise.all(listing.map(async (property) => {
+        const tokens = await ListingTokens.findOne({ propertyId: listing._id });
+        listing.TokenForSale = tokens
+        
+        const data = await Promise.all(listing.map(async (property) => {
             if (property.inAuction) {
                 const auction = await Auction.findOne({ propertyId: property._id });
                 property.auction = auction;
@@ -320,7 +295,10 @@ router.get("/get-property-by-user/:id", async (req, res) => {
             }
             return property;
         }));
-        return res.json(final)
+        return res.json({ 
+            status : "Success",
+            data 
+        })
     } catch (e) {
         console.log(e)
         return res.status(404).json('Product not found')
@@ -333,14 +311,21 @@ router.get("/get-property/:id", async (req, res) => {
     try {
         console.log(req.params.id)
         const listing = await Property.findById(mongoose.Types.ObjectId(req.params.id)).lean();
+        const tokens = await ListingTokens.findOne({ propertyId: req.params.id });
+        if(tokens){
+            listing.TokenForSale = [tokens]
+        }
         if (listing.inAuction) {
             const auction = await Auction.findOne({ propertyId: listing._id });
             listing.auction = auction;
-        } else if (property.isRented) {
+        } else if (listing.isRented) {
             const tenant = await Rent.findOne({ propertyId: listing._id }).populate('tenant');
             listing.tenant = tenant;
         }
-        return res.json(listing)
+        return res.json({ 
+            status : "Success",
+            listing 
+        })
     } catch (e) {
         console.log(e)
         return res.status(404).json('Product not found')
@@ -360,14 +345,13 @@ router.post("/startAuction/:id", fetchuser, async (req, res) => {
 
         //isrented should be false here.....
         //inAuction should be false here.... 
-        if (properties.isRented || properties.inAuction) {
-            return res.json("sorry it is already in auction")
+        if (properties.isRented ) {
+            return res.json("this property is on rent")
         }
-        const auction = await Auction.findOne({ propertyId: id })
-        if (auction) {
-            return res.json("sorry it is already in auction")
+        if (properties.inAuction) {
+            return res.json("sorry this property is already on Auction")
+                
         }
-        console.log(properties)
 
         await Auction.create({
             propertyId: id,
@@ -381,8 +365,10 @@ router.post("/startAuction/:id", fetchuser, async (req, res) => {
         const options = { new: true };
 
         const result = await Property.findByIdAndUpdate(id, { inAuction: true }, options);
-
-        res.send(result)
+        return res.json({ 
+            status : "Success",
+            result 
+        })
     } catch (error) {
         console.log(error.message)
     }
