@@ -30,6 +30,10 @@ const auction = new Schema({
     IsEnded : {
         type: Boolean,
         default: false
+    },
+    winner : {
+        type : Object,
+        default: null
     }
     
 })

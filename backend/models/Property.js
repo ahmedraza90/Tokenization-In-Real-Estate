@@ -28,14 +28,14 @@ const PropertyDetailsSchema = new Schema({
         type: String,
         required: true
     },
-    propertyImages:{
-        type:Array,
-        required:true
-    },
-    propertyDocuments:{
-        type:Array,
-        required:true,
-    },
+    // propertyImages:{
+    //     type:Array,
+    //     required:true
+    // },
+    // propertyDocuments:{
+    //     type:Array,
+    //     required:true,
+    // },
     isRented:{
         type:Boolean,
         default:false,

@@ -2,6 +2,7 @@ const express = require('express')
 var mongoose = require('mongoose');
 const Buyer  = require('../models/Buyer')
 const ListingTokens  = require('../models/ListingTokens')
+const Property = require('../models/Property')
 const fetchuser = require('../middleware/fetchuser');
 const router = express.Router()
 
@@ -69,7 +70,12 @@ router.get("/ListingTokens/:id",  async(req,res)=>{
     try {
         
         console.log(req.params.id);
-        const use = await ListingTokens.find({ user: req.params.id}).populate('propertyId')
+        const use = await ListingTokens.find({ user: req.params.id}).lean()
+        const data = await Promise.all(use.map(async (obj) => {
+            const property = await Property.findById({ _id: obj.propertyId });
+            obj["property"] = property
+            return obj
+        }));
         res.json(use)
     } catch (error) {
         console.error(error.message);

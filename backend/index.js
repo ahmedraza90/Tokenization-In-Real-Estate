@@ -10,6 +10,7 @@ const Property = require('./models/Property')
 const PropertyRoutes = require("./routes/addproperty")
 const swagger = require("./swagger")
 const swaggerUi = require('swagger-ui-express');
+const user = require('./models/User')
 connectToMongo();
 
 
@@ -42,22 +43,38 @@ app.get("/", (req, res) => {
 })
 
 // Schedule a task to run every minute to check for ended auctions  
-cron.schedule('* * * * *', async () => {
+cron.schedule('*/5 * * * * *', async () => {
     const now = new Date();
-    const result = await Auction.find({IsEnded: false});
-    console.log(result)
-    if(result.length > 0){
-        const filter = { endTime: { $lt: now } };
-        const update = { IsEnded: true };
-        await Auction.updateMany(filter, update);
-        await Promise.all(result.map(async (auction)=>{ 
-                console.log((auction.propertyId).toString())
-                const _id = `${(auction.propertyId).toString()}`
+    try{
+        const currentDate = new Date();
+        const filter = { endDate: { $lt: currentDate } };
+        const result = await Auction.find(filter);
+        if(result.length > 0) {
+            await Promise.all(result.map(async(obj)=>{
+                const _id = `${(obj._id).toString()}`
+                console.log(_id)
+                if(obj.users.length > 0){
+                    update = {
+                        winner: true,
+                        propertyId: _id
+                    }
+                    await Auction.findByIdAndUpdate(_id,{ IsEnded: true, winner: obj.users[0].userId } );
+                }else {                                               
+                    await Auction.findByIdAndUpdate(_id,{ IsEnded: true } );
+                }
                 await Property.findByIdAndUpdate(_id, { inAuction: false });
-        })
-        )
+            })
+            )
+            console.log("**")
+        } else {
+            console.log("no one")
+        }
+        console.log("done")
+    }catch(e){
+        console.log(e)
     }
 });
+
 
 
 

@@ -44,7 +44,7 @@ router.post("/checkToken", fetchuser, async (req, res) => {
 
     try {
         listing = await ListingTokens.create({
-            user: mongoose.Types.ObjectId(req.body.user),
+            user: mongoose.Types.ObjectId(req.user.id),
             propertyId: mongoose.Types.ObjectId(req.body.propertyId),
             SellerWalletAddress: req.body.SellerWalletAddress,
             TotalSupplies: req.body.numberOfSupplies,
@@ -223,14 +223,64 @@ router.get("/getBids/:id", async (req, res) => {
     }
 })
 
+// // add property using route '/api/property/check' Auth required
+// router.post('/check', fetchuser, Arrayupload, async (req, res) => {
+//     console.log("_________________-",req.body)
+//     // if there are errors return bad request and errors
+//     const errors = validationResult(req);
+//     if (!errors.isEmpty()) {
+//         return res.status(400).json({ errors: errors.array() });
+//     }
+//     const prop = await Property.findOne({ propertyAddress: req.body.propertyAddress })
+//     if (prop) {
+//         return res.status(400).json({
+//             status: "error",
+//             message: "property with this address already exist"
+//         });
+//     }
+//     try {
+//         const arrPropertyImages = []
+//         for (let i = 0; i < req.files.propertyImages.length; i++) {
+//             arrPropertyImages.push(req.files.propertyImages[i].originalname)
+//         }
+//         const arrPropertyDocuments = []
+//         for (let i = 0; i < req.files.propertyDocuments.length; i++) {
+//             arrPropertyDocuments.push(req.files.propertyDocuments[i].originalname)
+//         }
+//         let addProperty = await Property.create({
+//             user: req.user.id,
+//             ownerName: req.body.ownerName,
+//             PropertyContractAddress: req.body.PropertyContractAddress,
+//             OwnerWalletAddress: req.body.OwnerWalletAddress,
+//             propertyAddress: req.body.propertyAddress,
+//             propertyPrice: req.body.propertyPrice,
+//             propertyImages: arrPropertyImages,
+//             propertyDocuments: arrPropertyDocuments,
+//             beds: req.body.beds,
+//             baths: req.body.baths,
+//             size: req.body.size,
+//             country: req.body.country,
+//             city: req.body.city,
+//             postalcode: req.body.postalcode,
+//             numberOfSupplies: req.body.numberOfSupplies,
+//             isRentable : req.body.isRentable,
+//             Installment : req.body.Installment
+
+
+//         })
+//         res.json({ 
+//             status : "Success",
+//             addProperty
+//         })
+//     } catch (error) {
+//         console.error(error.message)
+//         res.status(500).send("internal server error")
+//     }
+// })
 // add property using route '/api/property/check' Auth required
-router.post('/check', fetchuser, Arrayupload, async (req, res) => {
+router.post('/check', async (req, res) => {
     console.log("_________________-",req.body)
-    // if there are errors return bad request and errors
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
-    }
+    
     const prop = await Property.findOne({ propertyAddress: req.body.propertyAddress })
     if (prop) {
         return res.status(400).json({
@@ -239,14 +289,14 @@ router.post('/check', fetchuser, Arrayupload, async (req, res) => {
         });
     }
     try {
-        const arrPropertyImages = []
-        for (let i = 0; i < req.files.propertyImages.length; i++) {
-            arrPropertyImages.push(req.files.propertyImages[i].originalname)
-        }
-        const arrPropertyDocuments = []
-        for (let i = 0; i < req.files.propertyDocuments.length; i++) {
-            arrPropertyDocuments.push(req.files.propertyDocuments[i].originalname)
-        }
+        // const arrPropertyImages = []
+        // for (let i = 0; i < req.files.propertyImages.length; i++) {
+        //     arrPropertyImages.push(req.files.propertyImages[i].originalname)
+        // }
+        // const arrPropertyDocuments = []
+        // for (let i = 0; i < req.files.propertyDocuments.length; i++) {
+        //     arrPropertyDocuments.push(req.files.propertyDocuments[i].originalname)
+        // }
         let addProperty = await Property.create({
             user: req.user.id,
             ownerName: req.body.ownerName,
@@ -254,8 +304,8 @@ router.post('/check', fetchuser, Arrayupload, async (req, res) => {
             OwnerWalletAddress: req.body.OwnerWalletAddress,
             propertyAddress: req.body.propertyAddress,
             propertyPrice: req.body.propertyPrice,
-            propertyImages: arrPropertyImages,
-            propertyDocuments: arrPropertyDocuments,
+            // propertyImages: arrPropertyImages,
+            // propertyDocuments: arrPropertyDocuments,
             beds: req.body.beds,
             baths: req.body.baths,
             size: req.body.size,
@@ -278,10 +328,9 @@ router.post('/check', fetchuser, Arrayupload, async (req, res) => {
     }
 })
 
-
 // fetch all properties of specific user by userid 
 // route = get-property-by-user/:id
-router.get("/get-property-by-user/:id", async (req, res) => {
+router.get("/get-property-by-user/:id",fetchuser, async (req, res) => {
     try {
         console.log(req.params.id)
         const listing = await Property.find({ user: req.params.id }).lean();
@@ -310,7 +359,7 @@ router.get("/get-property-by-user/:id", async (req, res) => {
 
 // fetch specifc properties by propertyId 
 // route = get-property/:id
-router.get("/get-property/:id", async (req, res) => {
+router.get("/get-property/:id",fetchuser, async (req, res) => {
     try {
         console.log(req.params.id)
         const listing = await Property.findById(mongoose.Types.ObjectId(req.params.id)).lean();
@@ -337,22 +386,23 @@ router.get("/get-property/:id", async (req, res) => {
 
 
 //api to start the auction by updating auction table and property table by using propertyId
-// route: /startAuction/:id
-router.post("/startAuction/:id", fetchuser, async (req, res) => {
+//route: /startAuction/:id
+router.post("/startAuction/:id", async (req, res) => {
+    
     try {
 
         const id = req.params.id;
         //crdeating auction 
-        const properties = await Property.findOne({ _id: id })
+        const properties = await Property.findById(mongoose.Types.ObjectId(req.params.id))
         console.log(properties)
 
         //isrented should be false here.....
         //inAuction should be false here.... 
-        if (properties.isRented ) {
+        if (properties.isRented) {
             return res.json("this property is on rent")
         }
         if (properties.inAuction) {
-            return res.json("sorry this property is already on Auction")
+            return res.json("This property is already on Auction")
                 
         }
 
@@ -360,7 +410,7 @@ router.post("/startAuction/:id", fetchuser, async (req, res) => {
             propertyId: id,
             users: [],
             startDate: req.body.startDate, //2002-12-09
-            endDate: req.body.endDate
+            endDate: req.body.endDate,
         })
 
         //updating property table   
@@ -375,6 +425,7 @@ router.post("/startAuction/:id", fetchuser, async (req, res) => {
     } catch (error) {
         console.log(error.message)
     }
+
 })
 
 
