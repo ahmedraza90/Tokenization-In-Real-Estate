@@ -12,6 +12,7 @@ import Slider from '../../components/slider/Slider'
 import MintModel from '../../components/mintModel/MintModel'
 import RentableForm from '../RentableForm/RentableForm'
 import axios from 'axios'
+import CreateDaoModal from '../../components/createDao/createDao'
 
 function PropertyDetails() {
     const [openModal, setOpenModal] = useState(false)
@@ -51,6 +52,7 @@ return (
             <p className='mintbtn' onClick={() => {
                 setOpenRentModal(true);
             }}>Rent Your Property</p>
+            <CreateDaoModal/>
 
             <CenterNavbar id={id} />
             <Footer />

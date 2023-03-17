@@ -45,55 +45,11 @@ function AddProperty() {
   const [ETHpriceToUSD, setETHpriceToUSD] = useState(0);
   const [message, setMessage] = useState("");
   const [uploading, setUploading] = useState(false);
-  // const [CloneAddress, setCloneAddress] = useState(null);
-  // const [CloneOwner, setCloneOwner] = useState(null);
-  const [Pricepertoken, setPricepertoken] = useState(null);
+  const [PricePerToken, setPricePerToken] = useState(null);
   const [successfull, setSuccessfull] = useState(false);
+  const [transactionHash, setTransactionHash] = useState();
   
-  // const Clone = async (
-  //   _propertyAddress,
-  //   _ownerName,
-  //   _totalSupply,
-  //   _tokensPerWallet
-  // ) => {
-  //   try {
-      // setUploading(true);
-  //     let pricePerToken = (propertyPrice / ETHpriceToUSD).toString();
-  //     setPricepertoken(pricePerToken);
-  //     pricePerToken = ethers.utils.parseEther(pricePerToken, 18);
-  //     console.log(pricePerToken);
-      // const accounts = await window.ethereum.request({
-      //   method: "eth_requestAccounts",
-      // });
-      // const address = accounts[0];
-      // setCloneOwner(accounts[0]);
-      // let provider = new ethers.providers.Web3Provider(window.ethereum);
-      // let signer = provider.getSigner();
-  //     const erc721Factory = new ethers.Contract(
-  //       ERC72FACTORYContractAddress,
-  //       ERC72FACTORYABI,
-  //       signer
-  //     );
-  //     const txResponse = await erc721Factory.cloneContract(
-  //       _propertyAddress,
-  //       _ownerName,
-  //       _totalSupply,
-  //       pricePerToken,
-  //       _tokensPerWallet,
-  //       { gasLimit: 5000000 }
 
-  //     );
-  //     console.log(txResponse)
-  //     erc721Factory.on("CloneCreatedAt", (from, cloneAdd) => {
-  //       setCloneAddress((prevAdd) => (prevAdd = cloneAdd));
-  //       setCloneOwner((prevAdd) => (prevAdd = from));
-  //     });
-
-  //   } catch (error) {
-  //     setMessage(error);
-  //     console.log(error.message);
-  //   }
-  // };
   
   const getEth = async () => {
     const { data } = await axios.get(
@@ -103,8 +59,40 @@ function AddProperty() {
   };
   useEffect(() => {
     getEth();
-  }, [Pricepertoken]);
+  }, [PricePerToken]);
 
+  const propertyDetails = useSelector(state => state.propertyDetails)
+    const { property } = propertyDetails
+    console.log(property);
+
+    const createproperty= async ()=>{
+      const accounts = await window.ethereum.request({
+          method: "eth_requestAccounts",
+        });
+        const address = accounts[0];
+       let provider = new ethers.providers.Web3Provider(window.ethereum);
+      let signer = provider.getSigner();
+      const Contract = new ethers.Contract(
+              ERC72FACTORYContractAddress,
+              ERC72FACTORYABI,
+              signer
+            );
+            const tx = await Contract.mint(`${property.Id}`,`${address}`,property?.TokenId);
+    setTransactionHash(tx.hash);
+    const receipt = await tx.wait();
+    console.log(receipt);
+    const events = receipt.events.filter((event) => event.event === "DaoAdd");
+    console.log(events);
+    const propertyEvent = events[0];
+    console.log(propertyEvent);
+    const propertyargs = propertyEvent.args[0];
+    console.log(propertyargs);
+    }
+    useEffect(()=>{
+if(property){
+  createproperty();
+}
+    },[])
 
   const submitHandler = async (e) => {
     setUploading(true);
@@ -145,69 +133,20 @@ function AddProperty() {
     formData.append("postalcode", postalcode);
     formData.append("isRentable", false);
     formData.append("Installment", 'noInstallement');
-    let pricePerToken = (propertyPrice / ETHpriceToUSD).toString();
-    setPricepertoken(pricePerToken);
+    let PricePerToken = (propertyPrice / ETHpriceToUSD).toString();
+    // setPricePerToken(PricePerToken);
+    console.log(PricePerToken);
     dispatch(
           addProperty(
             formData,
-            Pricepertoken,
+            PricePerToken,
             accounts[0],
             numberOfSupplies,
             numberOfTokenPerWallet
           )
     );
     setUploading(false);
-  //   if (CloneAddress !== null && CloneOwner !== null) {
-  //     if (
-  //       ownerName &&
-  //       numberOfSupplies &&
-  //       propertyAddress &&
-  //       propertyPrice &&
-  //       propertyImages &&
-  //       numberOfTokenPerWallet &&
-  //       propertyDocuments &&
-  //       beds &&
-  //       baths &&
-  //       size &&
-  //       country &&
-  //       city &&
-  //       postalcode &&
-  //       ETHpriceToUSD &&
-  //       CloneAddress &&
-  //       CloneOwner &&
-  //       Pricepertoken
-  //     ) {
-        // dispatch(
-        //   addProperty(
-        //     formData,
-        //     Pricepertoken,
-        //     CloneOwner,
-        //     numberOfSupplies,
-        //     numberOfTokenPerWallet
-        //   )
-        // );
-  //       setOwnerName(null);
-  //       setNumberOfSupplies(null);
-  //       setPropertyAddress(null);
-  //       setPropertyPrice(null);
-  //       setPropertyImages(null);
-  //       setNumberOfTokenPerWallet(null);
-  //       setPropertyDocuments(null);
-  //       setBeds(null);
-  //       setBaths(null);
-  //       setSize(null);
-  //       setCountry(null);
-  //       setCity(null);
-  //       setPostalCode(null);
-  //       setETHpriceToUSD(null);
-  //       setCloneAddress(null);
-  //       setCloneOwner(null);
-  //       setPricepertoken(null);
-  //     }
 
-  //     setUploading(false);
-  //     setSuccessfull(true);
-  //   }
   };
   
   return (

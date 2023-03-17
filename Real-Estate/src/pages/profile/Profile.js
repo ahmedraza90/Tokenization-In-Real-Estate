@@ -7,6 +7,8 @@ import ListingCard from './ListingCard'
 import { useSelector } from 'react-redux'
 import Navbar from '../../components/Navbar/Navbar'
 import TokensCards from './TokensCards'
+import RentInfo from "./RentInfo";
+import CreateDaoModal from '../../components/createDao/createDao'
 
 
 
@@ -118,6 +120,8 @@ function Profile() {
                     </ul>
                 </div>
             </div>
+            <RentInfo></RentInfo>
+            <CreateDaoModal/>
         </>
     )
 }

@@ -35,8 +35,9 @@ if (a) {
 }
 
 // Add new property
-export const addProperty = (formData, Pricepertoken, CloneOwner, numberOfSupplies, numberOfTokenPerWallet) => async (dispatch) => {
+export const addProperty = (formData, PricePerToken, CloneOwner, numberOfSupplies, numberOfTokenPerWallet) => async (dispatch) => {
 
+  console.log(formData, PricePerToken, CloneOwner, numberOfSupplies, numberOfTokenPerWallet);
   const SellerWalletAddress = CloneOwner
 
   console.log("formData", formData)
@@ -60,8 +61,9 @@ export const addProperty = (formData, Pricepertoken, CloneOwner, numberOfSupplie
     const propertyId = data.addProperty._id
 
     const testData = {
-      Pricepertoken, SellerWalletAddress, numberOfSupplies, numberOfTokenPerWallet, propertyId
+      PricePerToken, SellerWalletAddress, numberOfSupplies, numberOfTokenPerWallet, propertyId
     }
+    console.log(testData);
     const newconfig = {
       headers: {
         'Content-Type': 'application/json',
